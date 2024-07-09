@@ -9,6 +9,7 @@ const {hash} = require('bcryptjs');
 
 exports.registerCustomer = async (req, res) => {
     const { username, password, bio, age } = req.body;
+    console.log('Received registration request:', req.body);
     try {
         const hashedPassword = await hash(password, 10);
 
@@ -36,6 +37,7 @@ exports.registerCustomer = async (req, res) => {
         const createUserParams = { username, password: hashedPassword, bio, age };
 
         const result = await runQuery(createUserQuery, createUserParams);
+        console.log('Created user:', result);
 
         if (result.length === 0) {
             throw new Error('Failed to create user');
@@ -84,10 +86,26 @@ exports.loginCustomer = async (req, res) => {
             res.status(401).json({ message: 'Invalid credentials' });
         }
 
+        req.session.user = {
+            username:user.username,
+            bio:user.bio,
+            age:user.age,
+            role:user.role,
+            following:user.following
+        }
+
         
         const token = jwt.sign({ username: user.username }, process.env.SECRET, { expiresIn: '1h' });
 
-        res.status(200).json({ message: 'Login successful', token });
+        res.status(200).json({ message: 'Login successful', token, 
+            user:{
+                username:user.username,
+                bio:user.bio,
+                age:user.age,
+                role:user.role,
+                following:user.following
+            }
+         });
     } catch (error) {
         console.error('Error logging in:', error);
         res.status(500).json({ message: 'Failed to login' });

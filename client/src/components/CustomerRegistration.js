@@ -1,20 +1,23 @@
 import axios from 'axios';
 import React, {useState} from 'react';
-import {Link} from 'react-router-dom'; 
+import {Link, useNavigate} from 'react-router-dom'; 
+import { useSession } from '../context/SessionContext';
+axios.defaults.withCredentials = true
+
 
 function CustomerRegistration()
 {
 
 
     
-
+    const { saveSession } = useSession();
     const[username, setUsername] = useState('');
     const[password, setPassword] = useState('');
     const[bio, setBio] = useState('');
     const[age, setAge] = useState('');
     const [error, setError] = useState(null); 
     const [successMessage, setSuccessMessage] = useState('');
-    
+    const navigate = useNavigate(); 
     
     
     const handleRegistration = async(e) => {
@@ -31,10 +34,14 @@ function CustomerRegistration()
                 bio,
                 age
             });
+            console.log('Registration response:', response.data);
             console.log(response.data);
             setSuccessMessage(response.data.message);
+            saveSession(response.data.user);
+      
             
             setError(null); 
+            navigate('/carousel'); 
         }catch(error){
             setError(error.response?.data?.message || 'Failed to register'); 
             setSuccessMessage('');

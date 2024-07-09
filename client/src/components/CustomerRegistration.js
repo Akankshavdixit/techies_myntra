@@ -32,11 +32,12 @@ function CustomerRegistration()
                 age
             });
             console.log(response.data);
-            setSuccessMessage('Registration successful!');
+            setSuccessMessage(response.data.message);
             
             setError(null); 
         }catch(error){
-            setError('Failed to register'); 
+            setError(error.response?.data?.message || 'Failed to register'); 
+            setSuccessMessage('');
             console.error('Registration error:', error);
             
         }

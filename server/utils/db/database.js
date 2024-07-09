@@ -1,6 +1,6 @@
 import neo4j from 'neo4j-driver';
 
-export const connectToDB=async()=> {
+const connectToDB=async()=> {
   const URI = process.env.URL
   const USER = 'neo4j'
   const PASSWORD = process.env.password
@@ -14,4 +14,24 @@ export const connectToDB=async()=> {
   } catch(err) {
     console.log(`Connection error\n${err}\nCause: ${err.cause}`)
   }
+};
+
+
+const runQuery = async (query, params) => {
+  if (!driver) {
+      throw new Error('Database driver is not initialized. Call connectToDB() first.');
+  }
+
+  const session = driver.session();
+  try {
+      const result = await session.run(query, params);
+      return result.records;
+  } finally {
+      await session.close();
+  }
+};
+
+module.exports = {
+  connectToDB,
+  runQuery,
 };

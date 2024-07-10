@@ -1,6 +1,7 @@
 
 import React from 'react';
 import Slider from 'react-slick';
+import { useSession } from '../context/SessionContext';
 
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -42,9 +43,13 @@ function Carousel() {
       }
     ]
   };
+  const { session } = useSession();
+  
+  // const { username } = session.session;
 
   return (
     <div className=" mt-3 bg-orange-600 mx-10 py-8">
+      <p>Welcome, {session.username}!</p>
       <p className="text-center text-white font-semibold mt-3">Explore the trending styles</p>
       <div className="mt-7 mx-10">
         <Slider {...settings}>

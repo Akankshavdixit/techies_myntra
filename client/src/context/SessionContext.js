@@ -23,7 +23,7 @@ export const SessionProvider = ({ children }) => {
            
         } else {
             try {
-                const response = await axios.get('/api/user/me', { withCredentials: true });
+                const response = await axios.get('http://localhost:8000/api/user/me', { withCredentials: true });
                 setSession(response.data);
                 
             } catch (error) {

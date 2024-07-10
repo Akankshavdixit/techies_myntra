@@ -44,14 +44,12 @@ function Carousel() {
     ]
   };
   const { session } = useSession();
-  if (!session || !session.user) {
-    return <div>Loading...</div>; 
-  }
-  const { username } = session.user;
+  
+  // const { username } = session.session;
 
   return (
     <div className=" mt-3 bg-orange-600 mx-10 py-8">
-      <p>Welcome, {username}!</p>
+      <p>Welcome, {session.username}!</p>
       <p className="text-center text-white font-semibold mt-3">Explore the trending styles</p>
       <div className="mt-7 mx-10">
         <Slider {...settings}>

@@ -43,8 +43,9 @@ exports.registerCustomer = async (req, res) => {
             throw new Error('Failed to create user');
         }
 
-        
-        const newUser = result[0];
+        const newUser = result[0].u.properties;
+        const token = jwt.sign({ username: newUser.username }, process.env.SECRET, { expiresIn: '1h' });
+        console.log(newUser);
         res.status(201).json({
             message: 'Customer registered successfully',
             user: {
@@ -52,7 +53,8 @@ exports.registerCustomer = async (req, res) => {
                 bio: newUser.bio,
                 age: newUser.age,
                 role: newUser.role,
-                following: newUser.following
+                following: newUser.following,
+                token:token
             }
         });
     } catch (error) {
@@ -86,24 +88,19 @@ exports.loginCustomer = async (req, res) => {
             res.status(401).json({ message: 'Invalid credentials' });
         }
 
-        req.session.user = {
-            username:user.username,
-            bio:user.bio,
-            age:user.age,
-            role:user.role,
-            following:user.following
-        }
+        
 
         
         const token = jwt.sign({ username: user.username }, process.env.SECRET, { expiresIn: '1h' });
 
-        res.status(200).json({ message: 'Login successful', token, 
+        res.status(200).json({ message: 'Login successful',
             user:{
                 username:user.username,
                 bio:user.bio,
                 age:user.age,
                 role:user.role,
-                following:user.following
+                following:user.following,
+                token:token
             }
          });
     } catch (error) {

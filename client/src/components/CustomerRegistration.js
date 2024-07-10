@@ -36,7 +36,7 @@ function CustomerRegistration()
                 bio,
                 age
             }, {withCredentials : true});
-            console.log('Registration response:', response.data);
+            console.log('Registration response:', response.data.user);
             console.log(response.data);
             setSuccessMessage(response.data.message);
             saveSession(response.data.user);

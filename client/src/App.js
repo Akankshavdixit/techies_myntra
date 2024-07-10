@@ -6,6 +6,7 @@ import InfluencerLogin from './components/InfluencerLogin';
 import { BrowserRouter as Router, Route,Routes } from 'react-router-dom';
 import { SessionProvider } from './context/SessionContext';
 import Navbar from './components/Navbar';
+import AllPosts from './pages/AllPosts';
 
 
 function App() {
@@ -24,6 +25,7 @@ function App() {
         <Route path="/navbar" element={<Navbar/>} />
         <Route path="/influencerregistration" element={<InfluencerRegistration />} />
         <Route path="/influencerlogin" element={<InfluencerLogin />} />
+        <Route path = '/posts' element={<AllPosts/>}/>
 
 
         </Routes>

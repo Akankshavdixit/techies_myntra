@@ -80,81 +80,88 @@ const AddPost = async(req,res)=>{
         res.status(500).send({ message: 'Failed to upload images and create post', error });
       }
 }
-
-const addLike = async(req,res)=>{
-    const { postId } = req.params;
-    
-      try {
-        const driver = getDriver();
-        const session = driver.session();
-    
-        // Cypher query to increment likes for the Post node
-        const result = await session.run(
-          'MATCH (p:Post) WHERE id(p) = $postId SET p.likes = p.likes + 1 RETURN p.likes as likes',
-          { postId: parseInt(postId) } // Convert postId to integer if it's a string
-        );
-    
-        session.close();
-    
-        if (result.records.length === 0) {
-          return res.status(404).send({ message: 'Post not found' });
-        }
-    
-        const likes = result.records[0].get('likes').toNumber();
-        res.status(200).send({ message: 'Post liked successfully', likes: likes });
-      } catch (error) {
-        console.error('Failed to like post:', error);
-        res.status(500).send({ message: 'Failed to like post', error });
-      }
-    };
-
-const removeLike = async(req,res)=>{
-    const { postId } = req.params;
-    
-      try {
-        const driver = getDriver();
-        const session = driver.session();
-    
-        // Cypher query to increment likes for the Post node
-        const result = await session.run(
-          'MATCH (p:Post) WHERE id(p) = $postId SET p.likes = p.likes - 1 RETURN p.likes as likes',
-          { postId: parseInt(postId) } // Convert postId to integer if it's a string
-        );
-    
-        session.close();
-    
-        if (result.records.length === 0) {
-          return res.status(404).send({ message: 'Post not found' });
-        }
-    
-        const likes = result.records[0].get('likes').toNumber();
-        res.status(200).send({ message: 'Post like removed successfully', likes: likes });
-      } catch (error) {
-        console.error('Failed to like post:', error);
-        res.status(500).send({ message: 'Failed to remove post', error });
-      }
-    
-}
-  
-const getPosts=async(req,res)=>{
+const addLike = async (req, res) => {
+    console.log('addLike: ', req.user)
+    const username = req.user.username;
+    const { postId} = req.params;
+    console.log("adding",postId)
     const driver = getDriver();
-      const session = driver.session();
-      try {
-          const result = await session.run('MATCH (p:Post) RETURN p');
-          const posts = result.records.map(record => {
+    const session = driver.session();
+
+    try {
+        await session.run(
+            `MATCH (p:Post) WHERE is(p) = $postId
+             MATCH (u:User {username: $username})
+             MERGE (u)-[:LIKES]->(p)
+             SET p.likes = p.likes + 1
+             RETURN p`,
+            { postId: parseInt(postId), username }
+        );
+
+        res.status(200).send({ message: 'Like added successfully' });
+    } catch (error) {
+        res.status(500).send({ message: 'Failed to add like', error });
+    } finally {
+        await session.close();
+    }
+};
+
+const removeLike = async (req, res) => {
+    console.log(req.user)
+    const username = req.user.username
+    const { postId} = req.params;
+    const driver = getDriver();
+    const session = driver.session();
+
+    try {
+        await session.run(
+            `MATCH (u:User {username: $username})-[r:LIKES]->(p:Post) WHERE id(p) = $postId
+             DELETE r
+             SET p.likes = p.likes - 1
+             RETURN p`,
+            { postId: parseInt(postId), username }
+        );
+
+        res.status(200).send({ message: 'Like removed successfully' });
+    } catch (error) {
+        res.status(500).send({ message: 'Failed to remove like', error });
+    } finally {
+        await session.close();
+    }
+};
+  
+const getPosts = async (req, res) => {
+    console.log(req.user)
+    const username = req.user.username;
+    const driver = getDriver();
+    const session = driver.session();
+
+    try {
+        
+        const result = await session.run(
+                `MATCH (p:Post)
+                 OPTIONAL MATCH (p)<-[:LIKES]-(u:User {username: $username})
+                 RETURN p, count(u) as liked, ID(p) as postId`,
+                { username }
+            );
+        console.log(result.records[0].get.properties)
+
+        const posts = result.records.map(record => {
             const post = record.get('p').properties;
-            // Convert Neo4j integers to JavaScript numbers
             post.likes = post.likes.toNumber();
+            post.liked = record.get('liked').toNumber() > 0;
+            post.id = record.get('postId').low
+            console.log('here' , post.id)
             return post;
-          });
-      
-          res.status(200).send(posts);
-      }catch(error){
-          console.log("Error fetching posts: ", error);
-          res.status(500).json({message: 'Failed to fetch posts: ', error})
-      }finally{
-          await session.close()
-      }
-}
+        });
+        
+
+        res.status(200).send(posts);
+    } catch (error) {
+        res.status(500).send({ message: 'Failed to fetch posts', error });
+    } finally {
+        await session.close();
+    }
+};
 
 module.exports={AddPost, addLike, removeLike, getPosts}

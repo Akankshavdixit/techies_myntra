@@ -25,6 +25,7 @@ export const SessionProvider = ({ children }) => {
             try {
                 const response = await axios.get('http://localhost:8000/api/user/me', { withCredentials: true });
                 setSession(response.data);
+                saveSession(response.data)
                 
             } catch (error) {
                 console.error('Failed to load session:', error);

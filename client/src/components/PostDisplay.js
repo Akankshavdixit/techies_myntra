@@ -5,44 +5,33 @@ import { Carousel } from 'react-responsive-carousel';
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import './PostDisplay.css'; // Create this CSS file for additional styling
 import axios from 'axios';
+import { useSession } from '../context/SessionContext';
 
 const PostDisplay = ({ post }) => {
-    const [liked, setLiked] = useState(false);
-    const [likes, setLikes] = useState(post.likes.low);
-    console.log(post.likes.low)
-    
-    console.log(post)
-    useEffect(() => {
-        const updateLikeStatus = async () => {
-          try {
-            if (liked) {
-                setLikes(likes+1)
-              const response = await axios.post(`http://localhost:8080/add-like/${post.id}`, {}, {
-                headers: {
-                  'Content-Type': 'application/json',
-                  // 'Authorization': `Bearer ${token}` // Include the JWT token in the header
-                }
-              });
-              setLikes(response.data.likes); // Update likes count
-            } else {
-                setLikes(likes-1)
-              const response = await axios.post(`http://localhost:8080/remove-like/${post.id}`, {}, {
-                headers: {
-                  'Content-Type': 'application/json',
-                  // 'Authorization': `Bearer ${token}` // Include the JWT token in the header
-                }
-              });
-              setLikes(response.data.likes); // Update likes count
-            }
-          } catch (error) {
-            console.error('Failed to update like:', error);
-            // Handle error (e.g., show error message to user)
+    const [liked, setLiked] = useState(post.liked === 'true');
+    const {session}=useSession();
+    console.log(post.id)
+    const toggleLike = async () => {
+        console.log(session)
+        try{
+          if (session){
+            console.log(session.token)
+          let url = liked ? 'http://localhost:8000/posts/remove-like' : 'http://localhost:8000/posts/add-like';
+          url = url +'/'+post.id
+          console.log(url)
+          const response = await axios.post(url,null,{
+            headers: {
+              // 'Content-Type': 'application/json',
+              'Authorization': `Bearer ${session.token}`, // Include the JWT token in the header
           }
-        };
-    
-        updateLikeStatus(); // Call the async function immediately
-    
-      }, [liked])
+          });
+          if (response.status === 200) {
+              setLiked(!liked);
+              
+        }}}catch(err){
+          console.log(err)
+        }
+    };
     
   return (
     <div className="post-container">
@@ -54,9 +43,9 @@ const PostDisplay = ({ post }) => {
         ))}
       </Carousel>
       <button onClick={(e)=>{
-        setLiked(!liked)
+        toggleLike()
       }}>{liked ? 'Unlike' : 'Like'} </button>
-      <p>Likes: {likes}</p>
+      <p>Likes: {post.likes}</p>
       <div className="post-description">
         <p>{post.description}</p>
       </div>
@@ -74,6 +63,6 @@ const PostDisplay = ({ post }) => {
       </div>
     </div>
   );
-};
 
+}
 export default PostDisplay;

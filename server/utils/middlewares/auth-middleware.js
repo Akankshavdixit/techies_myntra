@@ -2,7 +2,7 @@ require('dotenv').config()
 
 
 const jwt =require("jsonwebtoken")
-const { runQuery } = require('../db/database')
+const { runQuery } = require('../db/database');
 
 const reqAuth=async (req,res,next)=>{
     const {authorization}=req.headers

@@ -68,43 +68,53 @@ exports.loginCustomer = async (req, res) => {
     const { username, password } = req.body;
 
     try {
-        
+        // Query to find the user by username
         const findUserQuery = 'MATCH (u:User {username: $username}) RETURN u';
         const findUserParams = { username };
 
         const result = await runQuery(findUserQuery, findUserParams);
 
+        // Check if a user was found
         if (result.length === 0 || !result[0].u) {
-            res.status(404).json({ message: 'User not found' });
+            return res.status(404).json({ message: 'User not found' });
         }
 
-        const user = result[0].u.properties; 
-
+        const user = result[0].u.properties;
         const hashedPassword = user.password;
 
-        
+        // Compare the provided password with the stored hashed password
         const passwordMatch = await bcrypt.compare(password, hashedPassword);
         if (!passwordMatch) {
-            res.status(401).json({ message: 'Invalid credentials' });
+            return res.status(401).json({ message: 'Invalid credentials' });
         }
 
-        
+        // Set the user session
+        req.session.user = {
+            username: user.username,
+            bio: user.bio,
+            age: user.age,
+            role: user.role,
+            following: user.following
+        };
 
-        
-        const token = jwt.sign({ username: user.username }, process.env.SECRET, { expiresIn: '1h' });
+        // Generate a JWT token
+        const token = jwt.sign({ username: user.username }, SECRET, { expiresIn: '1h' });
 
-        res.status(200).json({ message: 'Login successful',
-            user:{
-                username:user.username,
-                bio:user.bio,
-                age:user.age,
-                role:user.role,
-                following:user.following,
-                token:token
+        // Send a success response
+        res.status(200).json({
+            message: 'Login successful',
+            user: {
+                username: user.username,
+                bio: user.bio,
+                age: user.age,
+                role: user.role,
+                following: user.following,
+                token: token
             }
-         });
+        });
     } catch (error) {
         console.error('Error logging in:', error);
         res.status(500).json({ message: 'Failed to login' });
     }
 };
+

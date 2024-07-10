@@ -34,7 +34,7 @@ app.use(session({
 
 app.post('/register/customer', registerCustomer);
 app.use('/api/user', authRoutes);
-// app.post('/login/customer', loginCustomer);
+app.post('/login/customer', loginCustomer);
 
 app.listen(process.env.PORT,()=>{
     console.log('listening on port -> ', process.env.PORT)

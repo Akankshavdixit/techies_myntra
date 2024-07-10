@@ -7,7 +7,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const authRoutes = require('./utils/routes/auth.js')
 const {connectToDB} = require('./utils/db/database.js');
-const {registerCustomer, loginCustomer} = require('./utils/controllers/auth.js');
+const {registerCustomer, loginCustomer, registerInfluencer, loginInfluencer} = require('./utils/controllers/auth.js');
 
 const app=express()
 
@@ -35,6 +35,8 @@ app.use(session({
 app.post('/register/customer', registerCustomer);
 app.use('/api/user', authRoutes);
 app.post('/login/customer', loginCustomer);
+app.post('/register/influencer', registerInfluencer);
+app.post('/login/influencer', loginInfluencer);
 
 app.listen(process.env.PORT,()=>{
     console.log('listening on port -> ', process.env.PORT)

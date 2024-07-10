@@ -8,8 +8,9 @@ import axios from 'axios';
 import { useSession } from '../context/SessionContext';
 
 const PostDisplay = ({ post }) => {
-    const [liked, setLiked] = useState(post.liked === 'true');
+    const [liked, setLiked] = useState(post.liked);
     const {session}=useSession();
+    const [likes,setLikes]=useState(post.likes)
     console.log(post.id)
     const toggleLike = async () => {
         console.log(session)
@@ -26,7 +27,16 @@ const PostDisplay = ({ post }) => {
           }
           });
           if (response.status === 200) {
+              console.log(likes)
+              if (liked){
+                setLikes(likes-1)
+              }
+              else{
+                setLikes(likes+1)
+              }
+              console.log(likes)
               setLiked(!liked);
+              
               
         }}}catch(err){
           console.log(err)
@@ -45,7 +55,7 @@ const PostDisplay = ({ post }) => {
       <button onClick={(e)=>{
         toggleLike()
       }}>{liked ? 'Unlike' : 'Like'} </button>
-      <p>Likes: {post.likes}</p>
+      <p>Likes: {likes}</p>
       <div className="post-description">
         <p>{post.description}</p>
       </div>

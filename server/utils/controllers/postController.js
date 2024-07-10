@@ -57,9 +57,10 @@ const AddPost = async(req,res)=>{
         const productLinks = JSON.parse(req.body.productLinks || '[]'); // Parse JSON product links
     
         const result = await session.run(
-          'CREATE (p:Post {imageUrls: $imageUrls, likes: 0, description: $description, productLinks: $productLinks}) RETURN p',
-          { imageUrls: publicUrls, description: description, productLinks: productLinks }
-        );
+            'CREATE (p:Post {id: apoc.create.uuid(), imageUrls: $imageUrls, likes: 0, description: $description, productLinks: $productLinks}) RETURN p',
+            { imageUrls: publicUrls, description: description, productLinks: productLinks }
+          );
+          
     
         session.close();
     
@@ -84,19 +85,19 @@ const addLike = async (req, res) => {
     console.log('addLike: ', req.user)
     const username = req.user.username;
     const { postId} = req.params;
-    console.log("adding",postId)
+    console.log("adding",postId, username)
     const driver = getDriver();
     const session = driver.session();
-
     try {
-        await session.run(
-            `MATCH (p:Post) WHERE is(p) = $postId
+        const result = await session.run(
+            `MATCH (p:Post {id: $postId})
              MATCH (u:User {username: $username})
              MERGE (u)-[:LIKES]->(p)
              SET p.likes = p.likes + 1
              RETURN p`,
-            { postId: parseInt(postId), username }
+            { postId: postId, username }
         );
+        console.log(result)
 
         res.status(200).send({ message: 'Like added successfully' });
     } catch (error) {
@@ -107,19 +108,19 @@ const addLike = async (req, res) => {
 };
 
 const removeLike = async (req, res) => {
-    console.log(req.user)
     const username = req.user.username
     const { postId} = req.params;
     const driver = getDriver();
     const session = driver.session();
+    console.log(postId,username)
 
     try {
         await session.run(
-            `MATCH (u:User {username: $username})-[r:LIKES]->(p:Post) WHERE id(p) = $postId
+            `MATCH (u:User {username: $username})-[r:LIKES]->(p:Post {id: $postId})
              DELETE r
              SET p.likes = p.likes - 1
              RETURN p`,
-            { postId: parseInt(postId), username }
+            { postId: postId, username }
         );
 
         res.status(200).send({ message: 'Like removed successfully' });
@@ -150,7 +151,6 @@ const getPosts = async (req, res) => {
             const post = record.get('p').properties;
             post.likes = post.likes.toNumber();
             post.liked = record.get('liked').toNumber() > 0;
-            post.id = record.get('postId').low
             console.log('here' , post.id)
             return post;
         });

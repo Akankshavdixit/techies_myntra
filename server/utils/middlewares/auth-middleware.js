@@ -5,15 +5,13 @@ const jwt =require("jsonwebtoken")
 const { runQuery } = require('../db/database')
 
 const reqAuth=async (req,res,next)=>{
-    console.log('inside auth')
     const {authorization}=req.headers
-    console.log(authorization)
     if(!authorization){
         return res.status(401).json({error:"Authorization token required"})
     }
-    console.log(authorization)
+    
     const token=authorization.split(' ')[1]
-    console.log(token)
+    
     try{
         const {username}=jwt.verify(token,process.env.SECRET)
         const existingUserQuery = 'MATCH (u:User {username: $username}) RETURN u';

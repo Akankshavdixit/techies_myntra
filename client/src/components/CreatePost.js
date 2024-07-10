@@ -123,12 +123,6 @@ const CreatePost = ({ token }) => { // Pass the JWT token as a prop
         </div>
         <button type="submit">Submit Post</button>
       </form>
-      {post &&
-      <>
-       <p>{uploadStatus}</p>
-       <PostDisplay post={post}/>
-       </>
-      }
       
         
     </div>

@@ -6,9 +6,11 @@ const session = require('express-session');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const authRoutes = require('./utils/routes/auth.js')
+const postRoutes = require ('./utils/routes/postRoutes.js')
 const {connectToDB} = require('./utils/db/database.js');
 const {registerCustomer, loginCustomer} = require('./utils/controllers/auth.js');
-
+const { AddPost } = require('./utils/controllers/postController.js');
+const multer = require('multer')
 const app=express()
 
 app.use(cors({
@@ -25,13 +27,13 @@ app.use(session({
     saveUninitialized:true,
     cookie:{secure:false}
 }))
+const upload = multer({
+    storage: multer.memoryStorage() // Store uploads in memory before sending to GCS
+  });
+  
+app.post('/posts/upload', upload.array('images', 10),AddPost)
 
-
-
-
-
-
-
+app.use('/posts', postRoutes)
 app.post('/register/customer', registerCustomer);
 app.use('/api/user', authRoutes);
 // app.post('/login/customer', loginCustomer);

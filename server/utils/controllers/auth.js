@@ -13,7 +13,6 @@ exports.registerCustomer = async (req, res) => {
     try {
         const hashedPassword = await hash(password, 10);
 
-        
         const existingUserQuery = 'MATCH (u:User {username: $username}) RETURN u';
         const existingUserParams = { username };
         const existingUsers = await runQuery(existingUserQuery, existingUserParams);

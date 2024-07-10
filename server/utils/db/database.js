@@ -37,6 +37,13 @@ exports.runQuery = async (query, params) => {
     }
 };
 
+exports.getDriver= () => {
+    if (!driver) {
+      throw new Error('Driver is not initialized. Call connectToDB first.');
+    }
+    return driver;
+};
+
 exports.closeConnection = () => {
     if (driver) {
         driver.close();

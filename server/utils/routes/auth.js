@@ -1,6 +1,8 @@
+
+
 const express = require('express')
 const router = express.Router()
-const {registerCustomer} = require('../controllers/auth');
+const {registerCustomer} = require('../controllers/auth.js');
 
 router.get('/me', (req,res) => {
     if(!req.session.user){
@@ -10,6 +12,6 @@ router.get('/me', (req,res) => {
     res.status(200).json(req.session.user);
 
 });
-router.post('/registerCustomer', registerCustomer);
+// router.post('/register/customer', registerCustomer);
 
 module.exports = router;

@@ -2,11 +2,12 @@ import axios from 'axios';
 import React, {useState} from 'react';
 import {Link, useNavigate} from 'react-router-dom'; 
 import { useSession } from '../context/SessionContext';
-axios.defaults.withCredentials = true
+
 
 
 function CustomerRegistration()
 {
+    console.log('CustomerRegistration component rendered');
 
 
     
@@ -28,12 +29,13 @@ function CustomerRegistration()
             return;
         }
         try{
+            console.log('Making axios request...');
             const response = await axios.post( 'http://localhost:8000/register/customer',{
                 username,
                 password,
                 bio,
                 age
-            });
+            }, {withCredentials : true});
             console.log('Registration response:', response.data);
             console.log(response.data);
             setSuccessMessage(response.data.message);
@@ -43,6 +45,7 @@ function CustomerRegistration()
             setError(null); 
             navigate('/carousel'); 
         }catch(error){
+            console.log('Axios request failed', error);
             setError(error.response?.data?.message || 'Failed to register'); 
             setSuccessMessage('');
             console.error('Registration error:', error);

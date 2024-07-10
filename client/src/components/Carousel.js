@@ -45,7 +45,7 @@ function Carousel() {
   };
   const { session } = useSession();
   if (!session || !session.user) {
-    return <div>Loading...</div>; // Or handle loading state appropriately
+    return <div>Loading...</div>; 
   }
   const { username } = session.user;
 

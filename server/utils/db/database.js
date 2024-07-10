@@ -44,3 +44,11 @@ exports.closeConnection = () => {
     }
 };
 
+
+
+exports.getDriver= () => {
+    if (!driver) {
+      throw new Error('Driver is not initialized. Call connectToDB first.');
+    }
+    return driver;
+};

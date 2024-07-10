@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import PostDisplay from './PostDisplay';
+import { useSession } from '../context/SessionContext';
 
 
 
@@ -12,7 +13,7 @@ const CreatePost = ({ token }) => { // Pass the JWT token as a prop
   const [imageUrls, setImageUrls] = useState([]);
   const [post,setPost]=useState(null);
   const myntraLinkPattern =/^https:\/\/www\.myntra\.com\/[a-zA-Z0-9-]+\/[a-zA-Z0-9-]+\/[a-zA-Z0-9-]+\/\d+\/[a-zA-Z0-9-]+$/i
-
+  const { session } = useSession();
 
 
   const validateProductLinks = () => {
@@ -66,19 +67,33 @@ const CreatePost = ({ token }) => { // Pass the JWT token as a prop
       const response = await axios.post('http://localhost:8000/posts/upload', formData, {
         headers: { 
           'Content-Type': 'multipart/form-data',
-        //   'Authorization': `Bearer ${token}` // Include the JWT token in the header
+          'Authorization': `Bearer ${token}`
         }
       });
+      
+      
+      // Assuming influencer username is stored in local storage
+      const influencerUsername = session.username;
+
+      console.log(session.username);
+
+
+      
+      // Update the post object with influencer username
+      const updatedPost = {
+        ...response.data.post,
+        influencerUsername: influencerUsername
+      };
 
       setUploadStatus(response.data.message);
-    //   setImageUrls(response.data.urls);
-      setPost(response.data.post)
+      setPost(updatedPost);
 
     } catch (error) {
       console.error('Error uploading images and creating post:', error);
       setUploadStatus('Failed to upload images and create post');
     }
-  };
+};
+
 
   return (
     <div>

@@ -45,6 +45,7 @@ exports.registerCustomer = async (req, res) => {
         const newUser = result[0].u.properties;
         const token = jwt.sign({ username: newUser.username }, process.env.SECRET, { expiresIn: '1h' });
         console.log(newUser);
+        
         res.status(201).json({
             message: 'Customer registered successfully',
             user: {
@@ -56,6 +57,7 @@ exports.registerCustomer = async (req, res) => {
                 token:token
             }
         });
+        
     } catch (error) {
         console.error('Error registering customer:', error);
         res.status(500).json({ message: 'Failure to register customer' });

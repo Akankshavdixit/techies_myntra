@@ -1,23 +1,49 @@
-import React, { useState } from 'react';
+import React, { useState ,useEffect} from 'react';
 import axios from 'axios';
-import PostDisplay from './PostDisplay';
-
-
+import { predefinedTags } from '../constants/tags';
+import { useSession } from '../context/SessionContext';
 
 const CreatePost = ({ token }) => { // Pass the JWT token as a prop
   const [files, setFiles] = useState([]);
   const [description, setDescription] = useState('');
   const [productLinks, setProductLinks] = useState(['']);
-  const [uploadStatus, setUploadStatus] = useState('');
-  const [imageUrls, setImageUrls] = useState([]);
-  const [post,setPost]=useState(null);
+  const [selectedTags, setSelectedTags] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filteredTags, setFilteredTags] = useState(predefinedTags);
+  const [displayedTags, setDisplayedTags] = useState([]);
   const myntraLinkPattern =/^https:\/\/www\.myntra\.com\/[a-zA-Z0-9-]+\/[a-zA-Z0-9-]+\/[a-zA-Z0-9-]+\/\d+\/[a-zA-Z0-9-]+$/i
-
+  const {session} = useSession();
 
 
   const validateProductLinks = () => {
     return productLinks.every(link => myntraLinkPattern.test(link));
   };
+  useEffect(() => {
+    setDisplayedTags(predefinedTags); // Initially display all predefined tags
+  }, []);
+
+  useEffect(() => {
+    // Filter tags based on search term whenever it changes
+    if (searchTerm.trim() === '') {
+      setDisplayedTags(predefinedTags); // Show all tags if search term is empty
+    } else {
+      const filtered = predefinedTags.filter(tag =>
+        tag.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      setDisplayedTags(filtered);
+    }
+  }, [searchTerm]);
+
+  const handleTagSelection = (tag) => {
+    if (!selectedTags.includes(tag)) {
+      setSelectedTags([...selectedTags, tag]);
+    } else {
+      setSelectedTags(selectedTags.filter(t => t !== tag));
+    }
+    console.log(selectedTags)
+  };
+  
+
 
   const handleFilesChange = (e) => {
     const selectedFiles = Array.from(e.target.files);
@@ -54,6 +80,10 @@ const CreatePost = ({ token }) => { // Pass the JWT token as a prop
       alert("Please add some images and a description.");
       return;
     }
+    if (selectedTags.length==0){
+      alert('Please add appropriate tags!')
+      return
+    }
 
     try {
       const formData = new FormData();
@@ -62,21 +92,21 @@ const CreatePost = ({ token }) => { // Pass the JWT token as a prop
       });
       formData.append('description', description);
       formData.append('productLinks', JSON.stringify(productLinks));
+      formData.append('tags', JSON.stringify(selectedTags))
 
       const response = await axios.post('http://localhost:8000/posts/upload', formData, {
         headers: { 
           'Content-Type': 'multipart/form-data',
-        //   'Authorization': `Bearer ${token}` // Include the JWT token in the header
+          'Authorization': `Bearer ${session.token}` // Include the JWT token in the header
         }
       });
 
-      setUploadStatus(response.data.message);
-    //   setImageUrls(response.data.urls);
-      setPost(response.data.post)
+      
+      window.location.href = '/posts'
 
     } catch (error) {
       console.error('Error uploading images and creating post:', error);
-      setUploadStatus('Failed to upload images and create post');
+      
     }
   };
 
@@ -121,6 +151,29 @@ const CreatePost = ({ token }) => { // Pass the JWT token as a prop
           ))}
           <button type="button" onClick={handleAddLink}>Add another link</button>
         </div>
+        <div>
+        <h3>Select Tags:</h3>
+        <input
+          type="text"
+          placeholder="Search tags..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+        <ul>
+          {displayedTags.map((tag, index) => (
+            <li key={index}>
+              <label>
+                <input
+                  type="checkbox"
+                  checked={selectedTags.includes(tag)}
+                  onChange={() => handleTagSelection(tag)}
+                />{' '}
+                {tag}
+              </label>
+            </li>
+          ))}
+        </ul>
+      </div>
         <button type="submit">Submit Post</button>
       </form>
       

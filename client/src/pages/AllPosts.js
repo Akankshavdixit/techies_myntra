@@ -6,7 +6,6 @@ import CreatePost from '../components/CreatePost';
 import axios from 'axios';
 
 
-
 export default function AllPosts() {
     const [posts, setPosts] = useState([]);
     const {session}= useSession();

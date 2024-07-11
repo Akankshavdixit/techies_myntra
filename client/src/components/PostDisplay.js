@@ -6,6 +6,8 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 import './PostDisplay.css'; // Create this CSS file for additional styling
 import axios from 'axios';
 import { useSession } from '../context/SessionContext';
+import { GoHeart } from "react-icons/go";
+import { GoHeartFill } from "react-icons/go";
 
 const PostDisplay = ({ post }) => {
     const [liked, setLiked] = useState(post.liked);
@@ -13,8 +15,16 @@ const PostDisplay = ({ post }) => {
     const [likes,setLikes]=useState(post.likes)
     console.log(post.id)
     const toggleLike = async () => {
+        
         console.log(session)
         try{
+          if (liked){
+            setLikes(likes-1)
+          }
+          else{
+            setLikes(likes+1)
+          }
+          setLiked(!liked);
           if (session){
             console.log(session.token)
           let url = liked ? 'http://localhost:8000/posts/remove-like' : 'http://localhost:8000/posts/add-like';
@@ -25,20 +35,15 @@ const PostDisplay = ({ post }) => {
               // 'Content-Type': 'application/json',
               'Authorization': `Bearer ${session.token}`, // Include the JWT token in the header
           }
-          });
-          if (response.status === 200) {
-              console.log(likes)
-              if (liked){
-                setLikes(likes-1)
-              }
-              else{
-                setLikes(likes+1)
-              }
-              console.log(likes)
-              setLiked(!liked);
-              
-              
-        }}}catch(err){
+          });    
+        }}catch(err){
+          if (liked){
+            setLikes(likes-1)
+          }
+          else{
+            setLikes(likes+1)
+          }
+          setLiked(!liked);
           console.log(err)
         }
     };
@@ -54,7 +59,7 @@ const PostDisplay = ({ post }) => {
       </Carousel>
       <button onClick={(e)=>{
         toggleLike()
-      }}>{liked ? 'Unlike' : 'Like'} </button>
+      }}>{liked ? <GoHeartFill color='red'/> : <GoHeart/>} </button>
       <p>Likes: {likes}</p>
       <div className="post-description">
         <p>{post.description}</p>

@@ -32,17 +32,45 @@ const addLike = async (req, res) => {
     }
 };
 
-const follow = async(req,res) => {
+// const follow = async(req,res) => {
+//     const { influencerUsername } = req.params;
+//     const username = req.user.username;
+//     const driver = getDriver();
+//     const session = driver.session();
+
+//     try {
+//         await session.run(
+//             `MATCH (u:User {username: $username})
+//              MATCH (i:User {username: $influencerUsername})
+//              MERGE (u)-[:FOLLOWS]->(i)
+//              RETURN i`,
+//             { username, influencerUsername }
+//         );
+
+//         res.status(200).send({ message: `Successfully followed ${influencerUsername}` });
+//     } catch (error) {
+//         console.error(`Failed to follow ${influencerUsername}:`, error);
+//         res.status(500).send({ message: `Failed to follow ${influencerUsername}`, error });
+//     } finally {
+//         await session.close();
+//     }
+
+// }
+
+const follow = async (req, res) => {
     const { influencerUsername } = req.params;
     const username = req.user.username;
     const driver = getDriver();
     const session = driver.session();
 
     try {
+        // Create the FOLLOWS relationship and update follower count in a single query
         await session.run(
             `MATCH (u:User {username: $username})
              MATCH (i:User {username: $influencerUsername})
              MERGE (u)-[:FOLLOWS]->(i)
+             SET u.following = COALESCE(u.following, 0) + 1, 
+                 i.followers = COALESCE(i.followers, 0) + 1
              RETURN i`,
             { username, influencerUsername }
         );
@@ -54,20 +82,46 @@ const follow = async(req,res) => {
     } finally {
         await session.close();
     }
+};
 
-}
+// const unfollow = async(req,res) => {
 
-const unfollow = async(req,res) => {
+//     const { influencerUsername } = req.params;
+//     const username = req.user.username;
+//     const driver = getDriver();
+//     const session = driver.session();
 
+//     try {
+//         await session.run(
+//             `MATCH (u:User {username: $username})-[r:FOLLOWS]->(i:User {username: $influencerUsername})
+//              DELETE r
+//              RETURN i`,
+//             { username, influencerUsername }
+//         );
+
+//         res.status(200).send({ message: `Successfully unfollowed ${influencerUsername}` });
+//     } catch (error) {
+//         console.error(`Failed to unfollow ${influencerUsername}:`, error);
+//         res.status(500).send({ message: `Failed to unfollow ${influencerUsername}`, error });
+//     } finally {
+//         await session.close();
+//     }
+
+// }
+
+const unfollow = async (req, res) => {
     const { influencerUsername } = req.params;
     const username = req.user.username;
     const driver = getDriver();
     const session = driver.session();
 
     try {
+        // Delete the FOLLOWS relationship and update follower count in a single query
         await session.run(
             `MATCH (u:User {username: $username})-[r:FOLLOWS]->(i:User {username: $influencerUsername})
              DELETE r
+             SET u.following = COALESCE(u.following, 0) - 1, 
+                 i.followers = COALESCE(i.followers, 0) - 1
              RETURN i`,
             { username, influencerUsername }
         );
@@ -79,8 +133,8 @@ const unfollow = async(req,res) => {
     } finally {
         await session.close();
     }
+};
 
-}
 
 const removeLike = async (req, res) => {
     const username = req.user.username

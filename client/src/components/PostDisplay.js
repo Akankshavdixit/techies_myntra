@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { Carousel } from 'react-responsive-carousel';
 import "react-responsive-carousel/lib/styles/carousel.min.css";
-import './PostDisplay.css'; // Create this CSS file for additional styling
+import './PostDisplay.css'; 
 import axios from 'axios';
 import { useSession } from '../context/SessionContext';
 
@@ -16,7 +16,6 @@ const PostDisplay = ({ post }) => {
     console.log(post.id);
 
     useEffect(() => {
-        // Check if the current user is following the influencer
         const checkFollowingStatus = async () => {
             try {
                 const response = await axios.get(`http://localhost:8000/users/following/${post.influencerUsername}`, {
@@ -64,8 +63,8 @@ const PostDisplay = ({ post }) => {
           console.log(url)
           const response = await axios.post(url,null,{
             headers: {
-              // 'Content-Type': 'application/json',
-              'Authorization': `Bearer ${session.token}`, // Include the JWT token in the header
+                
+              'Authorization': `Bearer ${session.token}`, 
           }
           });
           if (response.status === 200) {
@@ -119,4 +118,6 @@ const PostDisplay = ({ post }) => {
   );
 
 }
+
+
 export default PostDisplay;

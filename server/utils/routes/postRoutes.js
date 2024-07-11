@@ -1,11 +1,13 @@
 const express = require('express')
 
-const { uploadPost, addLike, removeLike , getPosts} = require('../controllers/postController')
+const { uploadPost, addLike, removeLike , getPosts, getExplore} = require('../controllers/postController')
 const reqAuth = require('../middlewares/auth-middleware')
 const router = express.Router()
 const multer = require('multer')
 const { bucket } = require('../db/FireBaseAdmin');
 const { getDriver } = require('../db/database')
+const { DateTime } = require('luxon')
+
 
 const upload = multer({
     storage: multer.memoryStorage() // Store uploads in memory before sending to GCS
@@ -14,7 +16,7 @@ router.use(reqAuth);
 
 
   
-
+router.get('/explore', getExplore)
 router.post('/add-like/:postId', addLike)
 router.post('/remove-like/:postId', removeLike)
 router.get('/all', getPosts)
@@ -44,9 +46,11 @@ router.post('/upload', upload.array('images', 10), async(req,res)=>{
               console.error(`Failed to upload image ${file.originalname}: ${err}`);
               reject(`Failed to upload image ${file.originalname}: ${err}`);
             });
-    
+            
+
             blobStream.on('finish', async () => {
               try {
+                
                 await blob.makePublic(); // Make uploaded image publicly accessible
                 const publicUrl = `https://storage.googleapis.com/${bucket.name}/${blob.name}`;
                 resolve(publicUrl);
@@ -70,14 +74,16 @@ router.post('/upload', upload.array('images', 10), async(req,res)=>{
         const tags = req.body.tags
         console.log(tags)
         const productLinks = JSON.parse(req.body.productLinks || '[]'); // Parse JSON product links
-        const createdAt = new Date().toISOString();
+        const createdAt = new Date().toISOString().split('T')[0]
+        
+        console.log(createdAt)
         const result = await session.run(
             `MATCH (u:User {username: $username})
             CREATE (p:Post {
                             id: apoc.create.uuid(),
                             imageUrls: $imageUrls, 
                             likes: 0, 
-                            createdAt: $createdAt,
+                            createdAt: date($createdAt),
                             description: $description, 
                             tags: $tags,
                             productLinks: $productLinks})

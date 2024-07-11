@@ -43,7 +43,7 @@ exports.registerCustomer = async (req, res) => {
         }
 
         const newUser = result[0].u.properties;
-        const token = jwt.sign({ username: newUser.username }, process.env.SECRET, { expiresIn: '1h' });
+        const token = jwt.sign({ username: newUser.username }, process.env.SECRET, { expiresIn: '3d' });
         console.log(newUser);
         
         res.status(201).json({

@@ -11,7 +11,7 @@ const reqAuth=async (req,res,next)=>{
     }
     
     const token=authorization.split(' ')[1]
-    console.log(token)
+
     try{
         const {username}=jwt.verify(token,process.env.SECRET)
         const existingUserQuery = 'MATCH (u:User {username: $username}) RETURN u';

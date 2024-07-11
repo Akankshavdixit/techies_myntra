@@ -5,8 +5,6 @@ const {SECRET} = require('../constants/index');
 const {hash} = require('bcryptjs');
 
 
-
-
 exports.registerCustomer = async (req, res) => {
     const { username, password, bio, age } = req.body;
     console.log('Received registration request:', req.body);

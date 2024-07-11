@@ -13,7 +13,35 @@ const PostDisplay = ({ post }) => {
     const [liked, setLiked] = useState(post.liked);
     const {session}=useSession();
     const [likes,setLikes]=useState(post.likes)
-    console.log(post.id)
+    console.log(post)
+    console.log(post.creator)
+    // const [followers, setFollowers] = useState(post.followers);
+    const [isFollowing, setIsFollowing] = useState(post.isFollowed)
+
+    const toggleFollow = async () => {
+        try {
+            let url = isFollowing ? `http://localhost:8000/posts/unfollow/${post.creator}` : `http://localhost:8000/posts/follow/${post.creator}`;
+            const response = await axios.post(url, null, {
+                headers: {
+                    'Authorization': `Bearer ${session.token}`,
+                },
+            });
+
+            if (response.status === 200) {
+                if (isFollowing) {
+                    setIsFollowing(!isFollowing)
+                    // setFollowers(followers-1)
+                } else {
+                    setIsFollowing(!isFollowing)
+                    // setFollowers(followers + 1);
+                }
+            }
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
+   
     const toggleLike = async () => {
         
         console.log(session)
@@ -61,6 +89,8 @@ const PostDisplay = ({ post }) => {
         toggleLike()
       }}>{liked ? <GoHeartFill color='red'/> : <GoHeart/>} </button>
       <p>Likes: {likes}</p>
+      <button onClick={toggleFollow}>{isFollowing ? 'Unfollow' : 'Follow'}</button>
+      {/* <p>Followers: {followers}</p> */}
       <div className="post-description">
         <p>{post.description}</p>
       </div>

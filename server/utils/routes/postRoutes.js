@@ -1,6 +1,6 @@
 const express = require('express')
 
-const { addLike, removeLike , getPosts, getExplore} = require('../controllers/postController')
+const { addLike, removeLike , getPosts, getExplore, follow, unfollow} = require('../controllers/PostController')
 const reqAuth = require('../middlewares/auth-middleware')
 const router = express.Router()
 const multer = require('multer')
@@ -15,7 +15,8 @@ const upload = multer({
 router.use(reqAuth);
 
 
-  
+router.post('/follow/:creator', follow);
+router.post('/unfollow/:creator', unfollow);  
 router.get('/explore', getExplore)
 router.post('/add-like/:postId', addLike)
 router.post('/remove-like/:postId', removeLike)

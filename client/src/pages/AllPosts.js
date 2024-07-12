@@ -4,11 +4,21 @@ import PostDisplay from '../components/PostDisplay';
 import { useSession } from '../context/SessionContext';
 import CreatePost from '../components/CreatePost';
 import axios from 'axios';
-
+import './AllPosts.css'
 
 export default function AllPosts() {
     const [posts, setPosts] = useState([]);
     const {session}= useSession();
+
+    const update=(creator, isFollowing)=>{
+        setPosts(prevPosts =>
+            prevPosts.map(p =>
+                p.creator === creator ? { ...p, isFollowed: !isFollowing } : p
+            )
+        );
+        };
+        
+    
     useEffect(() => {
       const fetchPosts = async () => {
           if (!session) {
@@ -37,9 +47,14 @@ export default function AllPosts() {
   return (
     <>
     {posts && 
-        posts.map((p)=>{
-            return <PostDisplay key={p.id} post={p}/>
-        })
+    <>
+        <div className='allposts'>
+        {posts.map((p)=>{
+            return <PostDisplay key={p.id} post={p} update={update}/>
+        })}
+        </div>
+
+    </>
         }
       <CreatePost/>
     </>

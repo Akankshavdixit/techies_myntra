@@ -9,15 +9,18 @@ import { useSession } from '../context/SessionContext';
 import { GoHeart } from "react-icons/go";
 import { GoHeartFill } from "react-icons/go";
 
-const PostDisplay = ({ post }) => {
+const PostDisplay = ({ post, update }) => {
     const [liked, setLiked] = useState(post.liked);
     const {session}=useSession();
     const [likes,setLikes]=useState(post.likes)
     console.log(post)
-    console.log(post.creator)
     // const [followers, setFollowers] = useState(post.followers);
     const [isFollowing, setIsFollowing] = useState(post.isFollowed)
-
+    useEffect(() => {
+      setLiked(post.liked);
+      setLikes(post.likes);
+      setIsFollowing(post.isFollowed);
+  }, [post]);
     const toggleFollow = async () => {
         try {
             let url = isFollowing ? `http://localhost:8000/posts/unfollow/${post.creator}` : `http://localhost:8000/posts/follow/${post.creator}`;
@@ -28,6 +31,8 @@ const PostDisplay = ({ post }) => {
             });
 
             if (response.status === 200) {
+                
+                update(post.creator, isFollowing);
                 setIsFollowing(!isFollowing)
             }
         } catch (err) {
@@ -83,6 +88,7 @@ const PostDisplay = ({ post }) => {
         toggleLike()
       }}>{liked ? <GoHeartFill color='red'/> : <GoHeart/>} </button>
       <p>Likes: {likes}</p>
+      <p style={{display: 'inline'}}>@{post.creator}  </p>
       <button onClick={toggleFollow}>{isFollowing ? 'Unfollow' : 'Follow'}</button>
       {/* <p>Followers: {followers}</p> */}
       <div className="post-description">

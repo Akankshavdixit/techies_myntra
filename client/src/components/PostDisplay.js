@@ -28,13 +28,14 @@ const PostDisplay = ({ post }) => {
             });
 
             if (response.status === 200) {
-                if (isFollowing) {
-                    setIsFollowing(!isFollowing)
-                    // setFollowers(followers-1)
-                } else {
-                    setIsFollowing(!isFollowing)
-                    // setFollowers(followers + 1);
-                }
+                setIsFollowing(!isFollowing)
+                // if (isFollowing) {
+                //     setIsFollowing(!isFollowing)
+                //     // setFollowers(followers-1)
+                // } else {
+                //     setIsFollowing(!isFollowing)
+                //     // setFollowers(followers + 1);
+                // }
             }
         } catch (err) {
             console.error(err);

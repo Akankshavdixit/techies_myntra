@@ -43,12 +43,12 @@ const unfollow = async (req, res) => {
         await session.run(
             `MATCH (u:User {username: $username})-[r:FOLLOWS]->(i:User {username: $creator})
              DELETE r
-             SET u.following = COALESCE(u.following, 0) - 1, 
-                 i.followers = COALESCE(i.followers, 0) - 1
+             SET u.following = u.following - 1, 
+                 i.followers = i.followers - 1
              RETURN i`,
             {username:  username, creator: creator }
         );
-        console.log(result.records)
+        
 
         res.status(200).send({ message: `Successfully unfollowed ${creator} `});
     } catch (error) {
@@ -117,27 +117,29 @@ const getPosts = async (req, res) => {
 
     try {
         const result = await session.run(
-        `MATCH (p:Post)<-[:CREATED]-(i:User)
-            OPTIONAL MATCH (p)<-[:LIKES]-(u:User {username: $username})
-            OPTIONAL MATCH (u)-[:FOLLOWS]->(i)
-            RETURN p,
-                count(u) as liked,
-                ID(p) as postId,
-                i.username as creator,
-                CASE WHEN u IS NOT NULL THEN true ELSE false END as isFollowed`,
-        { username }
+            `MATCH (p:Post)<-[:CREATED]-(i:User)
+             OPTIONAL MATCH (p)<-[:LIKES]-(u:User {username: $username})
+             WITH p, i, u,
+                  CASE WHEN u = i THEN true ELSE EXISTS((u)-[:FOLLOWS]->(i)) END as isFollowed
+             RETURN p,
+                    count(u) as liked,
+                    ID(p) as postId,
+                    i.username as creator,
+                    isFollowed`,
+            { username }
         );
-
+        
         const posts = result.records.map(record => {
-        const post = record.get('p').properties;
-        post.likes = record.get('liked').toNumber();
-        post.isFollowed = record.get('isFollowed');
-        post.postId = record.get('postId').toNumber();
-        post.creator = record.get('creator');
-        return post;
+            const post = record.get('p').properties;
+            post.likes = post.likes.toNumber();
+            post.liked = record.get('liked').toNumber()>0
+            post.isFollowed = record.get('isFollowed');
+            post.postId = record.get('postId').toNumber();
+            post.creator = record.get('creator');
+            return post;
         });
 
-console.log(posts);
+        console.log(posts);
         res.status(200).send(posts);
     } catch (error) {
         res.status(500).send({ message: 'Failed to fetch posts', error });

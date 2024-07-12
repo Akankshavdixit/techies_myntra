@@ -11,7 +11,7 @@ const CreatePost = ({ token }) => { // Pass the JWT token as a prop
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredTags, setFilteredTags] = useState(predefinedTags);
   const [displayedTags, setDisplayedTags] = useState([]);
-  const myntraLinkPattern =/^https:\/\/www\.myntra\.com\/[a-zA-Z0-9-]+\/[a-zA-Z0-9-]+\/[a-zA-Z0-9-]+\/\d+\/[a-zA-Z0-9-]+$/i
+  const myntraLinkPattern =/^https:\/\/www\.myntra\.com.*\/buy$/i
   const {session} = useSession();
 
 

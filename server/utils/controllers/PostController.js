@@ -1,5 +1,6 @@
 const express = require('express');
 const { getDriver } = require('../db/database');
+const { NULL } = require('mysql/lib/protocol/constants/types');
 
 
 
@@ -132,8 +133,10 @@ const getPosts = async (req, res) => {
             const post = record.get('p').properties;
             post.likes = post.likes.toNumber();
             post.liked = record.get('liked')
+            
             post.isFollowed = record.get('isFollowed');
             post.creator = record.get('i').properties.username;
+            
             console.log(post)
             return post;
         });

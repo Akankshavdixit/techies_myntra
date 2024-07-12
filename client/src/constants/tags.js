@@ -18,6 +18,10 @@ export const predefinedTags = [
     "athleisure",
     "beachwear",
     "desi",
-    "western"
+    "western",
+    "girlie",
+    "summer",
+    "cottagecore",
+    "floral"
 ];
 

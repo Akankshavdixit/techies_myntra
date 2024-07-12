@@ -42,7 +42,7 @@ exports.registerCustomer = async (req, res) => {
         }
 
         const newUser = result[0].u.properties;
-        const token = jwt.sign({ username: newUser.username }, process.env.SECRET, { expiresIn: '1h' });
+        const token = jwt.sign({ username: newUser.username }, process.env.SECRET, { expiresIn: '3d' });
         console.log(newUser);
         res.status(201).json({
             message: 'Customer registered successfully',
@@ -96,7 +96,7 @@ exports.loginCustomer = async (req, res) => {
         };
 
         
-        const token = jwt.sign({ username: user.username }, SECRET, { expiresIn: '1h' });
+        const token = jwt.sign({ username: user.username }, SECRET, { expiresIn: '3d' });
 
         
         res.status(200).json({
@@ -154,7 +154,7 @@ exports.registerInfluencer = async (req, res) => {
         }
 
         const newUser = result[0].u.properties;
-        const token = jwt.sign({ username: newUser.username }, process.env.SECRET, { expiresIn: '1h' });
+        const token = jwt.sign({ username: newUser.username }, process.env.SECRET, { expiresIn: '3d' });
         console.log(newUser);
         res.status(201).json({
             message: 'Influencer registered successfully',
@@ -208,7 +208,7 @@ exports.loginInfluencer = async (req, res) => {
         };
 
         
-        const token = jwt.sign({ username: user.username }, SECRET, { expiresIn: '1h' });
+        const token = jwt.sign({ username: user.username }, SECRET, { expiresIn: '3d' });
 
         
         res.status(200).json({

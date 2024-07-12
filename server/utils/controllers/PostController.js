@@ -117,25 +117,24 @@ const getPosts = async (req, res) => {
 
     try {
         const result = await session.run(
-            `MATCH (p:Post)<-[:CREATED]-(i:User)
-             OPTIONAL MATCH (p)<-[:LIKES]-(u:User {username: $username})
-             WITH p, i, u,
-                  CASE WHEN u = i THEN true ELSE EXISTS((u)-[:FOLLOWS]->(i)) END as isFollowed
-             RETURN p,
-                    count(u) as liked,
-                    ID(p) as postId,
-                    i.username as creator,
-                    isFollowed`,
-            { username }
+            `MATCH (p: Post)<-[:CREATED]-(i:User)
+            OPTIONAL MATCH (u:User {username : $username })
+            OPTIONAL MATCH (u)-[like: LIKES]->(p)
+            OPTIONAL MATCH (u)-[follow:FOLLOWS]->(i)
+            RETURN p,i,
+              CASE WHEN like IS NOT NULL THEN true ELSE false END AS liked,
+              CASE WHEN follow IS NOT NULL THEN true ELSE false END AS isFollowed`,
+            { username : username}
         );
+        console.log(result.records)
         
         const posts = result.records.map(record => {
             const post = record.get('p').properties;
             post.likes = post.likes.toNumber();
-            post.liked = record.get('liked').toNumber()>0
+            post.liked = record.get('liked')
             post.isFollowed = record.get('isFollowed');
-            post.postId = record.get('postId').toNumber();
-            post.creator = record.get('creator');
+            post.creator = record.get('i').properties.username;
+            console.log(post)
             return post;
         });
 

@@ -2,6 +2,7 @@
 import React from 'react';
 import Slider from 'react-slick';
 import { useSession } from '../context/SessionContext';
+import {Link} from 'react-router-dom'
 
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -43,13 +44,11 @@ function Carousel() {
       }
     ]
   };
-  const { session } = useSession();
   
-  // const { username } = session.session;
-
   return (
-    <div className=" mt-3 bg-orange-600 mx-10 py-8">
-      <p>Welcome, {session.username}!</p>
+    <div className="bg-purple-100">
+    <div className=" mt-10 bg-purple-400 mx-10 py-8">
+      
       <p className="text-center text-white font-semibold mt-3">Explore the trending styles</p>
       <div className="mt-7 mx-10">
         <Slider {...settings}>
@@ -61,6 +60,12 @@ function Carousel() {
           <img src="https://images.bewakoof.com/web/trending-spring-outfits-for-girls-bewakoof-blog-4-1620740562.jpg" className="mx-auto my-4 h-64 px-8 w-full"></img>
         </Slider>
       </div>
+    </div>
+
+    <Link to="/customerregistration" className="ml-10 bg-purple-800 p-4">Register as customer</Link>
+    <Link to="/customerregistration">Register as influencer</Link>
+
+
     </div>
   );
 }

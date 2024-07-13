@@ -10,6 +10,7 @@ import AllPosts from './pages/AllPosts';
 import Explore from './pages/Explore'
 import CustomerProfile from './pages/CustomerProfile';
 import InfluencerProfile from './pages/InfluencerProfile';
+import CreatePost from './components/CreatePost';
 
 function App() {
   console.log('App component rendered');
@@ -27,7 +28,7 @@ function App() {
     <SessionProvider>
     <Router>
         <Routes>
-        <Route path="/carousel" element={<Carousel/>} />
+        <Route path="/" element={<Carousel/>} />
         <Route path="/customerregistration" element={<CustomerRegistration />} />
         <Route path="/customerlogin" element={<CustomerLogin />}/>
         <Route path="/navbar" element={<Navbar/>} />
@@ -36,6 +37,8 @@ function App() {
         <Route path = '/posts' element={<AllPosts/>}/>
         <Route path = '/explore' element={<Explore/>}/>
         <Route path='/profile' element={check? <InfluencerProfile/>: <CustomerProfile/>}/>
+        <Route path='/createpost' element={<CreatePost/>}/>
+
 
         </Routes>
       

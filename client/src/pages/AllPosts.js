@@ -53,7 +53,7 @@ export default function AllPosts() {
     
   return (
     <>
-    <CreatePost/>
+    {/* <CreatePost/> */}
     {posts && 
     <>
         <div className='allposts'>

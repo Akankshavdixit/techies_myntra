@@ -7,6 +7,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const authRoutes = require('./utils/routes/auth.js')
 const postRoutes = require ('./utils/routes/postRoutes.js')
+const profileRoutes = require('./utils/routes/profileRoutes.js')
 const {connectToDB} = require('./utils/db/database.js');
 const {registerCustomer, loginCustomer, registerInfluencer, loginInfluencer} = require('./utils/controllers/auth.js');
 
@@ -36,7 +37,7 @@ app.use(session({
 
   
 
-
+app.use('/profile',profileRoutes)
 app.use('/posts', postRoutes)
 app.post('/register/customer', registerCustomer);
 app.use('/api/user', authRoutes);

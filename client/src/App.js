@@ -4,20 +4,28 @@ import CustomerLogin from './components/CustomerLogin'
 import InfluencerRegistration from './components/InfluencerRegistration';
 import InfluencerLogin from './components/InfluencerLogin';
 import { BrowserRouter as Router, Route,Routes } from 'react-router-dom';
-import { SessionProvider } from './context/SessionContext';
+import { SessionProvider, useSession } from './context/SessionContext';
 import Navbar from './components/Navbar';
 import AllPosts from './pages/AllPosts';
 import Explore from './pages/Explore'
+import CustomerProfile from './pages/CustomerProfile';
+import InfluencerProfile from './pages/InfluencerProfile';
 
 function App() {
   console.log('App component rendered');
+  const {session}=useSession()
+  let check = false
+  let role = ''
+  if (session){
+    role = session.role
+    if (role=='influencer'){
+      check = true
+    }
+    console.log(session)
+  }
   return (
     <SessionProvider>
     <Router>
-
-
-    
-      
         <Routes>
         <Route path="/carousel" element={<Carousel/>} />
         <Route path="/customerregistration" element={<CustomerRegistration />} />
@@ -27,6 +35,7 @@ function App() {
         <Route path="/influencerlogin" element={<InfluencerLogin />} />
         <Route path = '/posts' element={<AllPosts/>}/>
         <Route path = '/explore' element={<Explore/>}/>
+        <Route path='/profile' element={check? <InfluencerProfile/>: <CustomerProfile/>}/>
 
         </Routes>
       

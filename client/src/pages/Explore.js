@@ -36,7 +36,7 @@ export default function AllPosts() {
           try {
               const response = await axios.get('http://localhost:8000/posts/explore', {
                   headers: {
-                      'Content-Type': 'multipart/form-data',
+                      'Content-Type': 'application/json',
                       'Authorization': `Bearer ${session.token}`, // Include the JWT token in the header
                   }
               });

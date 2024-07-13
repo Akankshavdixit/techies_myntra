@@ -81,10 +81,12 @@ const PostDisplay = ({ post, updateFollow, updateLike }) => {
       </Carousel>
       <button onClick={(e)=>{
         toggleLike()
-      }}>{liked ? <GoHeartFill color='red'/> : <GoHeart/>} </button>
+      }}>{liked ? <GoHeartFill  size={20} className='m-2' color='red'/> : <GoHeart size={20} className='m-2'/>} </button>
       <p>Likes: {likes}</p>
       <p style={{display: 'inline'}}>@{post.creator}  </p>
+      {(post.creator != session.username) &&
       <button onClick={toggleFollow}>{isFollowing ? 'Unfollow' : 'Follow'}</button>
+      }
       {/* <p>Followers: {followers}</p> */}
       <div className="post-description">
         <p>{post.description}</p>

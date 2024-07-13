@@ -2,7 +2,6 @@ import React from 'react'
 import { useState , useEffect} from 'react';
 import PostDisplay from '../components/PostDisplay';
 import { useSession } from '../context/SessionContext';
-import CreatePost from '../components/CreatePost';
 import axios from 'axios';
 import './AllPosts.css'
 

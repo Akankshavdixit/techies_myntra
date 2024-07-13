@@ -4,7 +4,6 @@ const { getDriver } = require('../db/database');
 
 const follow = async (req, res) => {
     const { creator } = req.params;
-    console.log(creator)
     const username = req.user.username;
     const driver = getDriver();
     const session = driver.session();
@@ -20,7 +19,6 @@ const follow = async (req, res) => {
              RETURN i`,
             { username : username, creator : creator }
         );
-        console.log(result.records)
 
         res.status(200).send({ message: `Successfully followed ${creator}` });
     } catch (error) {
@@ -74,7 +72,6 @@ const addLike = async (req, res) => {
              RETURN p`,
             { postId: postId, username }
         );
-        console.log(result)
 
         res.status(200).send({ message: 'Like added successfully' });
     } catch (error) {
@@ -89,7 +86,6 @@ const removeLike = async (req, res) => {
     const { postId} = req.params;
     const driver = getDriver();
     const session = driver.session();
-    console.log(postId,username)
 
     try {
         await session.run(
@@ -125,7 +121,6 @@ const getPosts = async (req, res) => {
               CASE WHEN follow IS NOT NULL THEN true ELSE false END AS isFollowed`,
             { username : username}
         );
-        console.log(result.records)
         
         const posts = result.records.map(record => {
             const post = record.get('p').properties;
@@ -139,7 +134,6 @@ const getPosts = async (req, res) => {
             return post;
         });
 
-        console.log(posts);
         res.status(200).send(posts);
     } catch (error) {
         res.status(500).send({ message: 'Failed to fetch posts', error });
@@ -174,8 +168,8 @@ const getExplore=async(req,res)=>{
           post.likes = post.likes.toNumber();
      
           post.liked = record.get('liked').toNumber() > 0;
-          
-          console.log('here' , post.id)
+          post.creator = record.get('i').properties.username;
+         
           return post;
       });
       

@@ -11,6 +11,7 @@ import Explore from './pages/Explore'
 import CustomerProfile from './pages/CustomerProfile';
 import InfluencerProfile from './pages/InfluencerProfile';
 import CreatePost from './components/CreatePost';
+import InfluencerAccount from './pages/InfluencerAccount';
 
 function App() {
   console.log('App component rendered');
@@ -38,6 +39,7 @@ function App() {
         <Route path = '/explore' element={<Explore/>}/>
         <Route path='/profile' element={check? <InfluencerProfile/>: <CustomerProfile/>}/>
         <Route path='/createpost' element={<CreatePost/>}/>
+        <Route path='/influencer/:iname' element={<InfluencerAccount/>}/>
 
 
         </Routes>

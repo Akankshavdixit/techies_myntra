@@ -199,15 +199,6 @@ exports.loginInfluencer = async (req, res) => {
         }
 
         
-        req.session.user = {
-            username: user.username,
-            bio: user.bio,
-            age: user.age,
-            role: user.role,
-            followers: user.followers
-        };
-
-        
         const token = jwt.sign({ username: user.username }, SECRET, { expiresIn: '3d' });
 
         

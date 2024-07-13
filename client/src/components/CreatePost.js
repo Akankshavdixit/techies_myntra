@@ -3,7 +3,7 @@ import axios from 'axios';
 import { predefinedTags } from '../constants/tags';
 import { useSession } from '../context/SessionContext';
 
-const CreatePost = ({ token }) => { // Pass the JWT token as a prop
+const CreatePost = () => { // Pass the JWT token as a prop
   const [files, setFiles] = useState([]);
   const [description, setDescription] = useState('');
   const [productLinks, setProductLinks] = useState(['']);
@@ -114,7 +114,7 @@ const CreatePost = ({ token }) => { // Pass the JWT token as a prop
   };
 
   return (
-    <div className="flex bg-purple-100">
+    <div className="flex 100bg-purple-">
     <div className=" bg-purple-50 p-16 w-1/2 pt-10 rounded-r-[50px] shadow-2xl">
       <h2 className="text-sm text-purple-600 font-semibold mb-4">Post Images</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
@@ -205,7 +205,7 @@ const CreatePost = ({ token }) => { // Pass the JWT token as a prop
       </form>
     </div>
     <div className="w-1/2 p-10 shadow-2xl mt-10">
-    <p className="text-purple-800 font-light text-sm">Dear {session.username},<br></br>
+    <p className="text-purple-800 font-light text-sm">Dear {session && session.username},<br></br>
     <br></br>
 
     I hope this message finds you well. As always, your impeccable sense of style and fashion insight never cease to amaze your audience. Your upcoming post is eagerly anticipated by your followers, and I’m sure it will be yet another hit.<br></br>

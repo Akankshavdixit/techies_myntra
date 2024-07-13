@@ -60,7 +60,6 @@ const getInfluencerProfile = async(req,res)=>{
         });
         
 
-        console.log(LikedPosts)
 
         const createdResults = await session.run(
             `MATCH (user:User {username: $username})-[:CREATED]->(post:Post)
@@ -91,4 +90,41 @@ const getInfluencerProfile = async(req,res)=>{
     }
 }
 
-module.exports={getCustomerProfile, getInfluencerProfile}
+const getInfluencerAccount=async(req,res)=>{
+    const {iname}=req.params
+    const username = req.user.username;
+    const driver = getDriver()
+    const session = driver.session();
+
+    try {
+        const result = await session.run(
+            `MATCH (i:User {username: $influencer_username})-[:CREATED]->(p:Post)
+            OPTIONAL MATCH (u:User {username: $username})-[:LIKES]->(p)
+            OPTIONAL MATCH (u)-[:FOLLOWS]->(i)
+            RETURN p,i,
+              CASE WHEN (u)-[:LIKES]->(p) THEN true ELSE false END AS liked,
+              CASE WHEN (u)-[:FOLLOWS]->(i) THEN true ELSE false END AS isFollowed`,
+            { influencer_username:iname , username: username}
+        );
+        
+        const posts = result.records.map(record => {
+            const isFollowed = record.get('isFollowed');
+            const post = record.get('p').properties;
+            post.creator = iname;
+            post.likes = post.likes.toNumber();
+            post.liked = record.get('liked')
+            post.isFollowed = isFollowed;
+            return post;
+        });
+        const influencer = result.records[0].get('i').properties
+        const follows = result.records[0].get('isFollowed')
+        res.status(200).json({ posts: posts, follows: follows, influencer: influencer});
+    } catch (error) {
+        console.error('Error retrieving liked posts:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    } finally {
+        await session.close();
+    }
+}
+
+module.exports={getCustomerProfile, getInfluencerProfile, getInfluencerAccount}

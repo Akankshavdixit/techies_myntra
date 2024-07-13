@@ -9,12 +9,14 @@ import { useSession } from '../context/SessionContext';
 import { GoHeart } from "react-icons/go";
 import { GoHeartFill } from "react-icons/go";
 import { BsBagHeartFill } from "react-icons/bs";
+import { useNavigate } from 'react-router-dom';
 
 const PostDisplay = ({ post, updateFollow, updateLike }) => {
     const [liked, setLiked] = useState(post.liked);
     const {session}=useSession();
     const [likes,setLikes]=useState(post.likes)
     console.log(post)
+    const navigate = useNavigate()
     // const [followers, setFollowers] = useState(post.followers);
     const [isFollowing, setIsFollowing] = useState(post.isFollowed)
     useEffect(() => {
@@ -70,6 +72,10 @@ const PostDisplay = ({ post, updateFollow, updateLike }) => {
           console.log(err)
         }
     };
+
+    const handleInfluencerClick=()=>{
+        navigate(`/influencer/${post.creator}`)
+    }
     
   return (
     <div className="post-container">
@@ -80,25 +86,55 @@ const PostDisplay = ({ post, updateFollow, updateLike }) => {
           </div>
         ))}
       </Carousel>
-      <button onClick={(e)=>{
-        toggleLike()
-      }}>{liked ? <GoHeartFill  size={20} className='m-2' color='red'/> : <GoHeart size={20} className='m-2'/>} </button>
-      <p>Likes: {likes}</p>
-      <p style={{display: 'inline'}}>@{post.creator}  </p>
-      {(post.creator != session.username) &&
-      <button onClick={toggleFollow}>{isFollowing ? 'Unfollow' : 'Follow'}</button>
-      }
+      <div>
+      <div className='flex justify-between'>
+        <div className='flex items-center'>
+          <p
+            style={{ display: 'inline', cursor: 'pointer' }}
+            className='ml-2 font-bold'
+            onClick={handleInfluencerClick}
+          >
+            @{post.creator}
+          </p>
+          {post.creator !== session.username && (
+            <button
+              style={{ display: 'inline' }}
+              onClick={toggleFollow}
+              className='ml-2'
+            >
+              {isFollowing ? 'Unfollow' : 'Follow'}
+            </button>
+          )}
+        </div>
+        <div className='flex items-center'>
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              toggleLike();
+            }}
+            className='m-2'
+          >
+            {post.liked ? (
+              <GoHeartFill size={20} color='red' />
+            ) : (
+              <GoHeart size={20} />
+            )}
+          </button>
+          <p className='mr-4'>{post.likes}</p>
+        </div>
+      </div>
+    </div>
       {/* <p>Followers: {followers}</p> */}
-      <div className="post-description">
+      <div className="ml-3">
         <p>{post.description}</p>
       </div>
-      <h3 className="text-sm font-bold mb-1">Product Links:  </h3>
-      <div className="post-product-links mb-2">
-            <br />
+      <h3 className="text-sm font-bold ml-3 mb-2">Product Links:  </h3>
+      <div className="post-product-links mb-2 ">
+            
             {post.productLinks && post.productLinks.map((link, index) => {
                 const productName = link.match(/\/([^\/]+)\/\d+\/buy$/)[1];
                 return (
-                    <a key={index} href={link} target="_blank" rel="noopener noreferrer" className="text-sm flex items-center mb-1 mr-4">
+                    <a key={index} href={link} target="_blank" rel="noopener noreferrer" className="text-sm flex items-center ml-2 mb-1 mr-4">
                         <BsBagHeartFill size={20} color='#ec4899' className="mr-2" />
                         <span className="truncate">{productName}</span>
                     </a>

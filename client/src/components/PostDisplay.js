@@ -73,10 +73,10 @@ const PostDisplay = ({ post, updateFollow, updateLike }) => {
     
   return (
     <div className="post-container">
-      <Carousel showThumbs={false}>
+      <Carousel showThumbs={false} >
         {post.imageUrls && post.imageUrls.map((url, index) => (
           <div key={index}>
-            <img src={url}  alt={`Post Image ${index + 1}`} />
+            <img src={url} alt={`Post Image ${index + 1}`} />
           </div>
         ))}
       </Carousel>

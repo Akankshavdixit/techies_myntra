@@ -5,9 +5,10 @@ import PostDisplay from '../components/PostDisplay';
 import { BsPerson } from "react-icons/bs";
 
 export default function InfluencerProfile() {
+    const {session}=useSession()
     const [likedPosts, setLikedPosts]=useState([]);
     const [myPosts, setMyPosts]=useState([])
-    const {session}=useSession()
+    
     const [activeTab, setActiveTab] = useState('created'); // 'created' or 'liked'
     const [numberOfFollowing, setNumberOfFollowing]=useState(0)
     const [person,setPerson]=useState(null)
@@ -59,6 +60,7 @@ export default function InfluencerProfile() {
     };
 
     return (
+        
         <div className="p-6">
             <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between mb-6">
                 {/* Left side */}
@@ -67,9 +69,9 @@ export default function InfluencerProfile() {
                         <BsPerson size={32} color="#4A90E2" /> 
                     </div>
                     <div>
-                        <h1 className="text-2xl font-bold mb-1">{session.username}</h1>
-                        <p className="text-gray-600">{session.bio}</p>
-                        <p className="text-gray-600">Age: {session.age}</p>
+                        <h1 className="text-2xl font-bold mb-1">{session && session.username}</h1>
+                        <p className="text-gray-600">{session && session.bio}</p>
+                        <p className="text-gray-600">Age: {session && session.age}</p>
                     </div>
                 </div>
 

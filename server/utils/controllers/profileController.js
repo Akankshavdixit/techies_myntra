@@ -7,18 +7,24 @@ const getCustomerProfile=async(req,res)=>{
 
     try {
         const result = await session.run(
-            `MATCH (user:User {username: $username})-[:LIKES]->(post:Post)
-             RETURN post, user`,
-            { username:username }
+            `MATCH (user:User {username: $username})-[:LIKES]->(post:Post)<-[:CREATED]-(creator:User)
+            OPTIONAL MATCH (user)-[f:FOLLOWS]->(creator)
+            RETURN post, creator, f IS NOT NULL AS isFollowed`,
+            { username: username }
         );
-
-        const posts = result.records.map(record => {
-            p=record.get('post').properties
-            p.likes = p.likes.toNumber();
-            p.liked = true
-            return p
         
-    });
+        const posts = result.records.map(record => {
+            const isFollowed = record.get('isFollowed');
+            const post = record.get('post').properties;
+            const creator = record.get('creator').properties;
+        
+            post.likes = post.likes.toNumber();
+            post.liked = true;
+            post.isFollowed = isFollowed;
+            post.creator = creator.username; // Assuming you want to display the username of the creator
+        
+            return post;
+        });
         res.status(200).json({ liked: posts , following: result.records[0].get('user').properties.following});
     } catch (error) {
         console.error('Error retrieving liked posts:', error);
@@ -35,8 +41,8 @@ const getInfluencerProfile = async(req,res)=>{
     try{
         const likeResult = await session.run(
             `MATCH (user:User {username: $username})-[:LIKES]->(post:Post)<-[:CREATED]-(creator:User)
-            OPTIONAL MATCH (user)-[:FOLLOWS]->(creator)
-            RETURN post, creator, COUNT(user) > 0 AS isFollowed`,
+            OPTIONAL MATCH (user)-[f:FOLLOWS]->(creator)
+            RETURN post, creator, f IS NOT NULL AS isFollowed`,
             { username: username }
         );
         
@@ -52,6 +58,9 @@ const getInfluencerProfile = async(req,res)=>{
         
             return post;
         });
+        
+
+        console.log(LikedPosts)
 
         const createdResults = await session.run(
             `MATCH (user:User {username: $username})-[:CREATED]->(post:Post)

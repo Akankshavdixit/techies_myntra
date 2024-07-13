@@ -64,9 +64,9 @@ export default function CustomerProfile() {
                         <BsPerson size={32} color="#4A90E2" /> 
                     </div>
                     <div>
-                        <h1 className="text-2xl font-bold mb-1">{session.username}</h1>
-                        <p className="text-gray-600">{session.bio}</p>
-                        <p className="text-gray-600">Age: {session.age}</p>
+                        <h1 className="text-2xl font-bold mb-1">{session && session.username}</h1>
+                        <p className="text-gray-600">{session && session.bio}</p>
+                        <p className="text-gray-600">Age: {session && session.age}</p>
                     </div>
                 </div>
 

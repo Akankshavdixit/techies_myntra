@@ -8,17 +8,18 @@ const getCustomerProfile=async(req,res)=>{
     try {
         const result = await session.run(
             `MATCH (user:User {username: $username})-[:LIKES]->(post:Post)
-             RETURN post`,
+             RETURN post, user`,
             { username:username }
         );
 
         const posts = result.records.map(record => {
             p=record.get('post').properties
             p.likes = p.likes.toNumber();
+            p.liked = true
             return p
+        
     });
-
-        res.status(200).json({ liked: posts });
+        res.status(200).json({ liked: posts , following: result.records[0].get('user').properties.following});
     } catch (error) {
         console.error('Error retrieving liked posts:', error);
         res.status(500).json({ error: 'Internal server error' });
@@ -54,7 +55,7 @@ const getInfluencerProfile = async(req,res)=>{
 
         const createdResults = await session.run(
             `MATCH (user:User {username: $username})-[:CREATED]->(post:Post)
-            return post`,
+            return post, user`,
             {username: username}
         )
         
@@ -63,9 +64,14 @@ const getInfluencerProfile = async(req,res)=>{
             p.likes = p.likes.toNumber();
             p.creator = username
             return p
-    })
+    })  
+        const followingResult = await session.run(
+            `MATCH (:User {username: $username})-[:FOLLOWS]->(following)
+            RETURN COUNT(following) AS numberOfFollowing`,
+            {username: username}
+        )
 
-        res.status(200).json({created: CreatedPosts, liked: LikedPosts})
+        res.status(200).json({created: CreatedPosts, liked: LikedPosts, numberofFollowing: followingResult.records[0].get('numberOfFollowing').toNumber(), person: createdResults.records[0].get('user').properties})
 
 
     }catch (error) {

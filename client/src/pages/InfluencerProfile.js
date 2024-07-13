@@ -2,12 +2,15 @@ import React, { useEffect, useState } from 'react'
 import { useSession } from '../context/SessionContext'
 import axios from 'axios'
 import PostDisplay from '../components/PostDisplay';
+import { BsPerson } from "react-icons/bs";
 
 export default function InfluencerProfile() {
     const [likedPosts, setLikedPosts]=useState([]);
     const [myPosts, setMyPosts]=useState([])
     const {session}=useSession()
     const [activeTab, setActiveTab] = useState('created'); // 'created' or 'liked'
+    const [numberOfFollowing, setNumberOfFollowing]=useState(0)
+    const [person,setPerson]=useState(null)
 
     const updateFollow = (creator, isFollowing) => {
         setLikedPosts(prevPosts =>
@@ -42,6 +45,8 @@ export default function InfluencerProfile() {
                 console.log(response.data);
                 setLikedPosts(response.data.liked);
                 setMyPosts(response.data.created);
+                setNumberOfFollowing(response.data.numberofFollowing)
+                setPerson(response.data.person)
             } catch (err) {
                 console.log(err);
             }
@@ -55,7 +60,32 @@ export default function InfluencerProfile() {
 
     return (
         <div className="p-6">
-            <h1 className="text-2xl font-bold mb-6 text-center">Influencer Profile</h1>
+            <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between mb-6">
+                {/* Left side */}
+                <div className="flex items-center mb-4 lg:mb-5 ml-20 mt-3">
+                    <div className="mr-4">
+                        <BsPerson size={32} color="#4A90E2" /> 
+                    </div>
+                    <div>
+                        <h1 className="text-2xl font-bold mb-1">{session.username}</h1>
+                        <p className="text-gray-600">{session.bio}</p>
+                        <p className="text-gray-600">Age: {session.age}</p>
+                    </div>
+                </div>
+
+                {/* Right side */}
+                <div className="flex flex-col lg:flex-row lg:items-center lg:w-1/3">
+                    <div className="text-center mb-2 lg:mb-0 lg:mr-4">
+                        <div className="text-xl font-bold">{person && person.followers.low}</div>
+                        <div className="text-gray-600">Followers</div>
+                    </div>
+                    <div className="text-center">
+                        <div className="text-xl font-bold">{numberOfFollowing}</div>
+                        <div className="text-gray-600">Following</div>
+                    </div>
+                </div>
+            </div>
+
             <div className="flex justify-center mb-6">
                 <button
                     className={`mr-4 py-2 px-4 rounded-lg focus:outline-none ${activeTab === 'created' ? 'bg-pink-500 text-white' : 'bg-gray-200 text-gray-700'}`}

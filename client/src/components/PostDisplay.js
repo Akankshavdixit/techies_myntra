@@ -8,6 +8,7 @@ import axios from 'axios';
 import { useSession } from '../context/SessionContext';
 import { GoHeart } from "react-icons/go";
 import { GoHeartFill } from "react-icons/go";
+import { BsBagHeartFill } from "react-icons/bs";
 
 const PostDisplay = ({ post, updateFollow, updateLike }) => {
     const [liked, setLiked] = useState(post.liked);
@@ -75,7 +76,7 @@ const PostDisplay = ({ post, updateFollow, updateLike }) => {
       <Carousel showThumbs={false}>
         {post.imageUrls && post.imageUrls.map((url, index) => (
           <div key={index}>
-            <img src={url} alt={`Post Image ${index + 1}`} />
+            <img src={url}  alt={`Post Image ${index + 1}`} />
           </div>
         ))}
       </Carousel>
@@ -91,18 +92,20 @@ const PostDisplay = ({ post, updateFollow, updateLike }) => {
       <div className="post-description">
         <p>{post.description}</p>
       </div>
-      <div className="post-product-links">
-        <h3>Product Links:</h3>
-        <ul>
-          {post.productLinks && post.productLinks.map((link, index) => (
-            <li key={index}>
-              <a href={link} target="_blank" rel="noopener noreferrer">
-                {link}
-              </a>
-            </li>
-          ))}
-        </ul>
-      </div>
+      <h3 className="text-sm font-bold mb-1">Product Links:  </h3>
+      <div className="post-product-links mb-2">
+            <br />
+            {post.productLinks && post.productLinks.map((link, index) => {
+                const productName = link.match(/\/([^\/]+)\/\d+\/buy$/)[1];
+                return (
+                    <a key={index} href={link} target="_blank" rel="noopener noreferrer" className="text-sm flex items-center mb-1 mr-4">
+                        <BsBagHeartFill size={20} color='#ec4899' className="mr-2" />
+                        <span className="truncate">{productName}</span>
+                    </a>
+                );
+            })}
+        </div>
+      
     </div>
   );
 

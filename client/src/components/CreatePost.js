@@ -111,19 +111,19 @@ const CreatePost = ({ token }) => { // Pass the JWT token as a prop
   };
 
   return (
-    <div>
-      <h2>Post Images</h2>
-      <form onSubmit={handleSubmit}>
+    <div className="p-6 bg-gray-100 rounded-lg shadow-md">
+      <h2 className="text-2xl font-bold mb-4">Post Images</h2>
+      <form onSubmit={handleSubmit} className="space-y-4">
         <input 
           type="file" 
           id="fileInput" 
           multiple 
           accept="image/*" 
           onChange={handleFilesChange} 
-          style={{ display: 'none' }} 
+          className="hidden" 
         />
-        <label htmlFor="fileInput" className="custom-upload-button">
-          <div className="plus-icon">+</div>
+        <label htmlFor="fileInput" className="flex items-center cursor-pointer bg-blue-500 text-white px-4 py-2 rounded-lg">
+          <div className="plus-icon mr-2">+</div>
           <span>Upload Images</span>
         </label>
         <input 
@@ -132,52 +132,68 @@ const CreatePost = ({ token }) => { // Pass the JWT token as a prop
           onChange={(e) => setDescription(e.target.value)} 
           placeholder="Enter description" 
           required 
+          className="w-full px-3 py-2 border rounded-lg"
         />
         <div>
-          <h3>Product Links</h3>
+          <h3 className="text-lg font-semibold mb-2">Product Links</h3>
           {productLinks.map((link, index) => (
-            <div key={index}>
+            <div key={index} className="flex items-center space-x-2 mb-2">
               <input 
                 type="text" 
                 value={link} 
                 onChange={(e) => handleLinkChange(index, e.target.value)} 
                 placeholder={`Product link ${index + 1}`} 
                 required 
+                className="w-full px-3 py-2 border rounded-lg"
               />
               {productLinks.length > 1 && (
-                <button type="button" onClick={() => handleRemoveLink(index)}>Remove</button>
+                <button 
+                  type="button" 
+                  onClick={() => handleRemoveLink(index)} 
+                  className="text-red-500"
+                >
+                  Remove
+                </button>
               )}
             </div>
           ))}
-          <button type="button" onClick={handleAddLink}>Add another link</button>
+          <button 
+            type="button" 
+            onClick={handleAddLink} 
+            className="bg-green-500 text-white px-4 py-2 rounded-lg"
+          >
+            Add another link
+          </button>
         </div>
         <div>
-        <h3>Select Tags:</h3>
-        <input
-          type="text"
-          placeholder="Search tags..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
-        <ul>
-          {displayedTags.map((tag, index) => (
-            <li key={index}>
-              <label>
-                <input
-                  type="checkbox"
-                  checked={selectedTags.includes(tag)}
-                  onChange={() => handleTagSelection(tag)}
-                />{' '}
-                {tag}
-              </label>
-            </li>
-          ))}
-        </ul>
-      </div>
-        <button type="submit">Submit Post</button>
+          <h3 className="text-lg font-semibold mb-2">Select Tags:</h3>
+          <input
+            type="text"
+            placeholder="Search tags..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="w-full px-3 py-2 border rounded-lg mb-2"
+          />
+          <ul className="space-y-1">
+            {displayedTags.map((tag, index) => (
+              <li key={index} className="flex items-center space-x-2">
+                <label className="flex items-center">
+                  <input
+                    type="checkbox"
+                    checked={selectedTags.includes(tag)}
+                    onChange={() => handleTagSelection(tag)}
+                    className="mr-2"
+                  />
+                  {tag}
+                </label>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded-lg">
+          Submit Post
+        </button>
       </form>
-      
-        
     </div>
   );
 };

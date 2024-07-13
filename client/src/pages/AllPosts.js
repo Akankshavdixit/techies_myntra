@@ -10,14 +10,21 @@ export default function AllPosts() {
     const [posts, setPosts] = useState([]);
     const {session}= useSession();
 
-    const update=(creator, isFollowing)=>{
+    const updateFollow = (creator, isFollowing) => {
         setPosts(prevPosts =>
             prevPosts.map(p =>
                 p.creator === creator ? { ...p, isFollowed: !isFollowing } : p
             )
         );
-        };
-        
+    };
+    
+    const updateLike = (id, liked, likes) => {
+        setPosts(prevPosts =>
+            prevPosts.map(p =>
+                p.id === id ? { ...p, liked, likes } : p
+            )
+        );
+    };    
     
     useEffect(() => {
       const fetchPosts = async () => {
@@ -46,17 +53,18 @@ export default function AllPosts() {
     
   return (
     <>
+    <CreatePost/>
     {posts && 
     <>
         <div className='allposts'>
         {posts.map((p)=>{
-            return <PostDisplay key={p.id} post={p} update={update}/>
+            return <PostDisplay key={p.id} post={p} updateFollow={updateFollow} updateLike={updateLike}/>
         })}
         </div>
 
     </>
         }
-      <CreatePost/>
+      
     </>
   )
 }

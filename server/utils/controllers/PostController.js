@@ -1,6 +1,4 @@
-const express = require('express');
 const { getDriver } = require('../db/database');
-const { NULL } = require('mysql/lib/protocol/constants/types');
 
 
 

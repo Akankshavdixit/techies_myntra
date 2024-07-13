@@ -9,7 +9,7 @@ import { useSession } from '../context/SessionContext';
 import { GoHeart } from "react-icons/go";
 import { GoHeartFill } from "react-icons/go";
 
-const PostDisplay = ({ post, update }) => {
+const PostDisplay = ({ post, updateFollow, updateLike }) => {
     const [liked, setLiked] = useState(post.liked);
     const {session}=useSession();
     const [likes,setLikes]=useState(post.likes)
@@ -32,7 +32,7 @@ const PostDisplay = ({ post, update }) => {
 
             if (response.status === 200) {
                 
-                update(post.creator, isFollowing);
+                updateFollow(post.creator, isFollowing);
                 setIsFollowing(!isFollowing)
             }
         } catch (err) {
@@ -45,13 +45,11 @@ const PostDisplay = ({ post, update }) => {
         
         console.log(session)
         try{
-          if (liked){
-            setLikes(likes-1)
-          }
-          else{
-            setLikes(likes+1)
-          }
-          setLiked(!liked);
+          const newLiked = !liked;
+          const newLikes = newLiked ? likes + 1 : likes - 1;
+
+          setLikes(newLikes);
+          setLiked(newLiked);
           if (session){
             console.log(session.token)
           let url = liked ? 'http://localhost:8000/posts/remove-like' : 'http://localhost:8000/posts/add-like';
@@ -62,15 +60,12 @@ const PostDisplay = ({ post, update }) => {
               // 'Content-Type': 'application/json',
               'Authorization': `Bearer ${session.token}`, // Include the JWT token in the header
           }
-          });    
+          });  
+          updateLike(post.id, newLiked, newLikes);  
         }}catch(err){
-          if (liked){
-            setLikes(likes-1)
-          }
-          else{
-            setLikes(likes+1)
-          }
+          setLikes(liked ? likes + 1 : likes - 1);
           setLiked(!liked);
+          
           console.log(err)
         }
     };

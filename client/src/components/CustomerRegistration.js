@@ -57,7 +57,7 @@ function CustomerRegistration()
     return (
         <div className="flex rounded-3xl mx-48 mt-16">
                 
-            <div className = "bg-purple-300 rounded-l-3xl  w-2/5 h-[500px]">
+            <div className = "bg-pink-100 rounded-l-3xl  w-2/5 h-[550px]">
             <form onSubmit={handleRegistration}>
                 <input 
                 onChange={(e) => setUsername(e.target.value)}
@@ -65,7 +65,7 @@ function CustomerRegistration()
                 placeholder = 'username'
                 name = 'username'
                 id = 'username'
-                className = "md:ml-16 bg-purple-200 rounded-xl w-48 py-2 px-2 border-none outline-none md:mt-24"
+                className = "md:ml-16 bg-pink-500 rounded-xl w-48 py-2 px-2 border-none outline-none md:mt-24 placeholder-white"
                 spellcheck="false"
                 value = {username}
                 required
@@ -77,24 +77,24 @@ function CustomerRegistration()
                 placeholder = 'password'
                 name = 'password'
                 id = 'password'
-                className = "md:ml-16 bg-purple-200 rounded-xl w-48 py-2 px-2 border-none outline-none md:mt-7"
+                className = "md:ml-16 bg-pink-500 rounded-xl w-48 py-2 px-2 border-none outline-none md:mt-7 placeholder-white"
                 spellcheck="false"
                 value = {password}
                 required
     
                 />
-                {/* <textarea placeholder="Bio" value={bio} onChange={(e) => setBio(e.target.value)} className = "md:ml-16 bg-purple-200 py-2 px-2 w-48 border-none outline-none md:mt-7" required /> */}
-                <input type="number" placeholder="Age" value={age} onChange={(e) => setAge(e.target.value)} className = "md:ml-16 w-48 rounded-xl bg-purple-200 py-2 px-2 border-none outline-none md:mt-7" required />
+                <textarea placeholder="Bio" value={bio} onChange={(e) => setBio(e.target.value)} className = "md:ml-16 bg-pink-500 rounded-xl placeholder-white py-2 px-2 w-48 border-none outline-none md:mt-7" required />
+                <input type="number" placeholder="Age" value={age} onChange={(e) => setAge(e.target.value)} className = "md:ml-16 w-48 rounded-xl bg-pink-500 py-2 px-2 border-none outline-none md:mt-7 placeholder-white" required />
                 <div className = "text-red-600 ml-16 text-sm">{error}</div>
                 <div className = "text-green-600 ml-16 text-sm">{successMessage}</div>
-                <button type="submit" className="text-white text-lg bg-purple-600 md:px-5 md:py-2 md:ml-24   md:mt-16 rounded-xl ">
+                <button type="submit" className="text-white text-lg bg-orange-500 md:px-5 md:py-2 md:ml-24   md:mt-16 rounded-xl ">
                     Register
                 </button>
     
                 <p class="md:ml-14 text-sm md:mt-2 ">
                 Already have an account?
                 <Link
-                    class="font-semibold text-purple-600 transition-all duration-200"
+                    class="font-semibold text-orange-500 transition-all duration-200"
                     to="/customerlogin"
                     >Login</Link>
                 </p>
@@ -105,7 +105,7 @@ function CustomerRegistration()
     
         </div>
         <div className="w-3/5"  >
-         <img src="/resources/registrationwallpaper.jpg" className="h-[500px]  "></img>
+         <img src="/resources/registrationwallpaper.jpg" className="h-[550px]  "></img>
 
         </div>
         

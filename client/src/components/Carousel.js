@@ -1,14 +1,19 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import Slider from 'react-slick';
 import { useSession } from '../context/SessionContext';
 import {Link} from 'react-router-dom'
 
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import CustomerRegistration from './CustomerRegistration';
+import InfluencerRegistration from './InfluencerRegistration';
 
 
 function Carousel() {
+
+  // const [showCustomerRegistration, setShowCustomerRegistration] = useState(false);
+  // const [showInfluencerRegistration, setShowInfluencerRegistration] = useState(false);
   const settings = {
     dots: true,
     infinite: true,
@@ -44,12 +49,22 @@ function Carousel() {
       }
     ]
   };
+
+  // const handleCustomerClick = async() => {
+  //   setShowCustomerRegistration(true);
+  //   setShowInfluencerRegistration(false);
+  // }
+
+  // const handleInfluencerClick = async() => {
+  //   setShowCustomerRegistration(false);
+  //   setShowCustomerRegistration(true);
+  // }
   
   return (
-    <div className="bg-purple-100">
-    <div className=" mt-10 bg-purple-400 mx-10 py-8">
+    <div >
+    <div className=" mt-10 bg-pink-100 mx-10 py-8">
       
-      <p className="text-center text-white font-semibold mt-3">Explore the trending styles</p>
+      <p className="text-center text-pink-500 font-semibold mt-3">Explore the trending styles</p>
       <div className="mt-7 mx-10">
         <Slider {...settings}>
           <img src="https://images.bewakoof.com/web/trending-spring-outfits-for-girls-bewakoof-blog-4-1620740562.jpg" className="mx-auto my-4 px-8 h-64 w-full"></img>
@@ -61,11 +76,12 @@ function Carousel() {
         </Slider>
       </div>
     </div>
+    <div className="mt-16 text-center">
+    <Link to="/customerregistration" className="ml-10 bg-pink-500 p-4">Register as customer</Link>
+    <Link to="/influencerregistration" className="ml-10 bg-orange-500 p-4">Register as influencer</Link>
+    </div>
 
-    <Link to="/customerregistration" className="ml-10 bg-purple-800 p-4">Register as customer</Link>
-    <Link to="/customerregistration">Register as influencer</Link>
-
-
+    
     </div>
   );
 }

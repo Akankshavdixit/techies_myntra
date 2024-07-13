@@ -19,6 +19,10 @@ const PostDisplay = ({ post, updateFollow, updateLike }) => {
     const navigate = useNavigate()
     // const [followers, setFollowers] = useState(post.followers);
     const [isFollowing, setIsFollowing] = useState(post.isFollowed)
+    
+    
+    
+
     useEffect(() => {
       setLiked(post.liked);
       setLikes(post.likes);
@@ -76,16 +80,26 @@ const PostDisplay = ({ post, updateFollow, updateLike }) => {
     const handleInfluencerClick=()=>{
         navigate(`/influencer/${post.creator}`)
     }
+
+    
+
+    
+
     
   return (
     <div className="post-container">
-      <Carousel showThumbs={false} >
+    
+      
+      <Carousel showThumbs={false} showStatus={false} >
         {post.imageUrls && post.imageUrls.map((url, index) => (
           <div key={index}>
             <img src={url} alt={`Post Image ${index + 1}`} />
           </div>
         ))}
       </Carousel>
+
+
+      
       <div>
       <div className='flex justify-between'>
         <div className='flex items-center'>
@@ -100,7 +114,7 @@ const PostDisplay = ({ post, updateFollow, updateLike }) => {
             <button
               style={{ display: 'inline' }}
               onClick={toggleFollow}
-              className='ml-2'
+              className='ml-2 bg-pink-500 text-white rounded-lg px-2'
             >
               {isFollowing ? 'Unfollow' : 'Follow'}
             </button>

@@ -4,11 +4,12 @@ import PostDisplay from '../components/PostDisplay';
 import { useSession } from '../context/SessionContext';
 import axios from 'axios';
 import './AllPosts.css'
+import {Link} from 'react-router-dom'
 
 export default function AllPosts() {
     const [posts, setPosts] = useState([]);
     const {session}= useSession();
-
+    
     const updateFollow = (creator, isFollowing) => {
         setPosts(prevPosts =>
             prevPosts.map(p =>
@@ -16,6 +17,8 @@ export default function AllPosts() {
             )
         );
     };
+
+    
     
     const updateLike = (id, liked, likes) => {
         setPosts(prevPosts =>
@@ -26,6 +29,8 @@ export default function AllPosts() {
     };    
     
     useEffect(() => {
+        
+        
       const fetchPosts = async () => {
           if (!session) {
               console.log('No session available');
@@ -41,7 +46,9 @@ export default function AllPosts() {
                   }
               });
               console.log(response.data);
-              setPosts(response.data);
+              const reversedPosts = response.data.reverse();
+              setPosts(reversedPosts);
+              
           } catch (err) {
               console.log(err);
           }
@@ -50,20 +57,50 @@ export default function AllPosts() {
       fetchPosts();
   }, [session]);
     
-  return (
-    <>
-    {/* <CreatePost/> */}
-    {posts && 
-    <>
-        <div className='allposts'>
-        {posts.map((p)=>{
-            return <PostDisplay key={p.id} post={p} updateFollow={updateFollow} updateLike={updateLike}/>
-        })}
-        </div>
+  //return (
+    // <>
+    
+    
+    // {posts && 
+    // <>
+    // <div>
+    //     {session && session.role === "influencer" && (
 
-    </>
-        }
+    //             <div>
+    //             <Link to="/posts" className="bg-pink-500 text-white px-4 py-2 rounded-lg">Create post</Link>
+    //             </div>
+    //         )}
+            
+        
+    //     <div className='allposts'>
+    //     {posts.map((p)=>{
+    //         return <PostDisplay key={p.id} post={p} updateFollow={updateFollow} updateLike={updateLike}/>
+    //     })}
+    //     </div>
+
+    // </>
+    //     }
+    //     </div>
       
-    </>
-  )
+    // </>
+
+    return (
+        <div className="flex flex-col bg-pink-50 shadow-2xl">
+            <div className='allposts flex-1 p-[420px]  pt-4 overflow-y-auto'>
+                {posts.map((p) => (
+                    <PostDisplay key={p.id} post={p} updateFollow={updateFollow} updateLike={updateLike} />
+                ))}
+            </div>
+
+            {session && session.role === "influencer" && (
+                <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2">
+                    <Link to="/createpost" className="bg-orange-500 hover:bg-pink-500  text-white px-4 py-3 rounded-full">+</Link>
+                </div>
+            )}
+        </div>
+    );
+    
+    
+    
+  
 }

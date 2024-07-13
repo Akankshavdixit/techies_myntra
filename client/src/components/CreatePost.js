@@ -2,6 +2,7 @@ import React, { useState ,useEffect} from 'react';
 import axios from 'axios';
 import { predefinedTags } from '../constants/tags';
 import { useSession } from '../context/SessionContext';
+import {Link} from 'react-router-dom'
 
 const CreatePost = () => { // Pass the JWT token as a prop
   const [files, setFiles] = useState([]);
@@ -115,8 +116,8 @@ const CreatePost = () => { // Pass the JWT token as a prop
 
   return (
     <div className="flex 100bg-purple-">
-    <div className=" bg-purple-50 p-16 w-1/2 pt-10 rounded-r-[50px] shadow-2xl">
-      <h2 className="text-sm text-purple-600 font-semibold mb-4">Post Images</h2>
+    <div className=" bg-pink-50 p-16 w-1/2 pt-10 rounded-r-[50px] shadow-2xl">
+      <h2 className="text-sm text-pink-500 font-semibold mb-4">Post Images</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
         <input 
           type="file" 
@@ -126,7 +127,7 @@ const CreatePost = () => { // Pass the JWT token as a prop
           onChange={handleFilesChange} 
           className="hidden" 
         />
-        <label htmlFor="fileInput" className="flex items-center cursor-pointer bg-purple-700 text-white px-4 py-2 rounded-lg">
+        <label htmlFor="fileInput" className="flex items-center cursor-pointer bg-pink-500 hover:bg-orange-500 text-white px-4 py-2 rounded-lg">
           <div className="plus-icon mr-2">+</div>
           <span>Upload Images</span>
         </label>
@@ -141,10 +142,10 @@ const CreatePost = () => { // Pass the JWT token as a prop
           onChange={(e) => setDescription(e.target.value)} 
           placeholder="Enter description" 
           required 
-          className="w-full px-3 bg-purple-100 py-2  rounded-lg"
+          className="w-full px-3 bg-white py-2  rounded-lg"
         />
         <div>
-          <h3 className="text-sm mb-2 font-semibold text-purple-600">Product Links</h3>
+          <h3 className="text-sm mb-2 font-semibold text-pink-500">Product Links</h3>
           {productLinks.map((link, index) => (
             <div key={index} className="flex items-center space-x-2 mb-2">
               <input 
@@ -153,7 +154,7 @@ const CreatePost = () => { // Pass the JWT token as a prop
                 onChange={(e) => handleLinkChange(index, e.target.value)} 
                 placeholder={`Product link ${index + 1}`} 
                 required 
-                className="w-full bg-purple-100 px-3 py-2 rounded-lg"
+                className="w-full bg-white px-3 py-2 rounded-lg"
               />
               {productLinks.length > 1 && (
                 <button 
@@ -169,21 +170,21 @@ const CreatePost = () => { // Pass the JWT token as a prop
           <button 
             type="button" 
             onClick={handleAddLink} 
-            className="bg-purple-700 text-white px-4 py-2 rounded-lg"
+            className="bg-orange-500 hover:bg-pink-500 text-white px-4 py-2 rounded-lg"
           >
             Add another link
           </button>
         </div>
         <div>
-          <h3 className="text-sm font-semibold text-purple-600 mb-2">Select Tags:</h3>
+          <h3 className="text-sm font-semibold text-pink-500 mb-2">Select Tags:</h3>
           <input
             type="text"
             placeholder="Search tags..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full px-3 py-2  bg-purple-100 rounded-lg mb-2"
+            className="w-full px-3 py-2  bg-white rounded-lg mb-2"
           />
-          <ul className="space-y-1 text-purple-600 font-light">
+          <ul className="space-y-1 text-pink-500 font-light">
             {displayedTags.map((tag, index) => (
               <li key={index} className="flex items-center space-x-2">
                 <label className="flex items-center">
@@ -199,13 +200,13 @@ const CreatePost = () => { // Pass the JWT token as a prop
             ))}
           </ul>
         </div>
-        <button type="submit" className="bg-purple-700 text-white px-4 py-2 rounded-lg">
+        <button type="submit" className="bg-orange-500 hover:bg-pink-500 text-white px-4 py-2 rounded-lg">
           Submit Post
         </button>
       </form>
     </div>
-    <div className="w-1/2 p-10 shadow-2xl mt-10">
-    <p className="text-purple-800 font-light text-sm">Dear {session && session.username},<br></br>
+    <div className="w-1/2 p-10 shadow-2xl pt-20 rounded-l-[50px]">
+    <p className="text-pink-500 font-light text-sm">Dear {session && session.username},<br></br>
     <br></br>
 
     I hope this message finds you well. As always, your impeccable sense of style and fashion insight never cease to amaze your audience. Your upcoming post is eagerly anticipated by your followers, and I’m sure it will be yet another hit.<br></br>
@@ -222,6 +223,11 @@ Thank you for being a source of inspiration and for sharing your incredible fash
 
 Wishing you all the best,<br></br>
 Myntragram</p>
+<div className="mt-12">
+  <Link to="/posts" className="bg-orange-500 hover:bg-pink-500 text-white px-4 py-2 rounded-lg">View posts</Link>
+
+</div>
+
 
     </div>
     </div>

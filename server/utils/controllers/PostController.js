@@ -152,23 +152,22 @@ const getExplore=async(req,res)=>{
     const priorDate = new Date(new Date().setDate(new Date().getDate()-5)).toISOString().split('T')[0]
     console.log(priorDate, username)
     const result = await session.run(
-      `MATCH (p:Post)
-       WHERE p.createdAt >= date($trendDate)
-       OPTIONAL MATCH (p)<-[:LIKES]-(u:User {username: $username})
-       RETURN p, p.likes AS likeCount, count(u) AS liked
-       ORDER BY likeCount DESC`,
-      { trendDate: priorDate, username: username }
-  );
-    
-
-      const posts = result.records.map(record => {
-         
-          const post = record.get('p').properties;
-       
-          post.likes = post.likes.toNumber();
+        `MATCH (p:Post)<-[:CREATED]-(creator:User)
+         WHERE p.createdAt >= date($trendDate)
+         OPTIONAL MATCH (p)<-[:LIKES]-(u:User {username: $username})
+         RETURN p, creator, p.likes AS likeCount, count(u) AS liked
+         ORDER BY likeCount DESC`,
+        { trendDate: priorDate, username: username }
+      );
      
-          post.liked = record.get('liked').toNumber() > 0;
-          post.creator = record.get('i').properties.username;
+      const posts = result.records.map(record => {
+        const postNode = record.get('p');
+        const post = postNode.properties;
+         // Ensure the post ID is included if needed
+        post.likes = post.likes.toNumber();
+        post.liked = record.get('liked').toNumber() > 0;
+      
+        post.creator = record.get('creator').properties.username;
          
           return post;
       });

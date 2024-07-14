@@ -10,6 +10,7 @@ const postRoutes = require ('./utils/routes/postRoutes.js')
 const profileRoutes = require('./utils/routes/profileRoutes.js')
 const {connectToDB} = require('./utils/db/database.js');
 const {registerCustomer, loginCustomer, registerInfluencer, loginInfluencer} = require('./utils/controllers/auth.js');
+const reqAuth = require('./utils/middlewares/auth-middleware.js');
 
 
 const app=express()

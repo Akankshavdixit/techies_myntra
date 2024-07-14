@@ -39,11 +39,11 @@ function InfluencerRegistration()
             console.log('Registration response:', response.data.user);
             console.log(response.data);
             setSuccessMessage(response.data.message);
-            saveSession(response.data.user);
+            await saveSession(response.data.user);
       
             
             setError(null); 
-            navigate('/createpost'); 
+            navigate('/posts'); 
         }catch(error){
             console.log('Axios request failed', error);
             setError(error.response?.data?.message || 'Failed to register'); 

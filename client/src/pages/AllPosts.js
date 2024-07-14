@@ -94,13 +94,7 @@ export default function AllPosts() {
           ))}
         </div>
       
-        {session && session.role === "influencer" && (
-          <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2">
-            <Link to="/createpost" className="bg-orange-500 hover:bg-pink-500 text-white px-4 py-3 rounded-full">
-              +
-            </Link>
-          </div>
-        )}
+        
       </div>
     );
     

@@ -3,6 +3,7 @@ import axios from 'axios';
 import { predefinedTags } from '../constants/tags';
 import { useSession } from '../context/SessionContext';
 import {Link} from 'react-router-dom'
+import Navbar from './Navbar';
 
 const CreatePost = () => { // Pass the JWT token as a prop
   const [files, setFiles] = useState([]);
@@ -125,6 +126,8 @@ const CreatePost = () => { // Pass the JWT token as a prop
   };
 
   return (
+    <>
+    <Navbar/>
     <div className="flex min-h-screen">
     <div className=" bg-pink-50 p-16 w-1/2 pt-10 rounded-r-[50px] shadow-2xl">
       <h2 className="text-sm text-pink-500 font-semibold mb-4">Post Images</h2>
@@ -252,6 +255,7 @@ const CreatePost = () => { // Pass the JWT token as a prop
 
     </div>
     </div>
+    </>
   );
 };
 

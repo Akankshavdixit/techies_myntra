@@ -39,7 +39,7 @@ function CustomerRegistration()
             console.log('Registration response:', response.data.user);
             console.log(response.data);
             setSuccessMessage(response.data.message);
-            saveSession(response.data.user);
+            await saveSession(response.data.user);
       
             
             setError(null); 

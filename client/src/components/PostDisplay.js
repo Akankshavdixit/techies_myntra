@@ -110,7 +110,7 @@ const PostDisplay = ({ post, updateFollow, updateLike }) => {
           >
             @{post.creator}
           </p>
-          {post.creator !== session.username && (
+          {session && post.creator !== session.username && (
             <button
               style={{ display: 'inline' }}
               onClick={toggleFollow}

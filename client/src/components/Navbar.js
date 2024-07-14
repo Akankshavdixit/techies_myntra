@@ -12,9 +12,10 @@ const Navbar = () => {
         return location.pathname === path ? 'text-pink-500 font-bold underline-offset-2 underline' : 'text-white';
     };
 
-    const handleLogout = () => {
-        logout(); 
-        navigate.push('/'); 
+    const handleLogout = async() => {
+        await logout(); 
+        navigate('/')
+      
     };
 
     return (
@@ -38,6 +39,15 @@ const Navbar = () => {
                 >
                     Explore Trending
                 </Link>
+                {session && session.role === "influencer" && (
+                
+                <Link to="/createpost" className={`text-white hover:text-pink-500 flex items-center space-x-1 ${isActiveLink(
+                    '/createpost'
+                )} px-3 py-2 rounded-md`}>
+                    Create Post
+                </Link>
+                
+        )}
                 <Link
                     to={`/profile`}
                     className={`text-white hover:text-pink-500 flex items-center space-x-1 ${isActiveLink(

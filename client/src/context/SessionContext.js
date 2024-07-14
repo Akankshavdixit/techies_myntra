@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const SessionContext = createContext(null);
 
@@ -12,15 +13,15 @@ export const SessionProvider = ({ children }) => {
     
 
     const saveSession = (sessionData) => {
+        console.log('saving session')
         setSession(sessionData);
         localStorage.setItem('session', JSON.stringify(sessionData));
     };
 
-    const logout = () => {
-        setSession(null); // Clear session state
-        localStorage.removeItem('session'); // Clear session from localStorage
-        // You may also want to make an API call to logout on the server-side if required
-    };
+    const logout = async() => {
+            setSession(null); // Clear session state
+            localStorage.removeItem('session'); // Clear session from localStorage
+            };
 
     const loadSession = async () => {
         const storedSession = localStorage.getItem('session');
@@ -40,9 +41,9 @@ export const SessionProvider = ({ children }) => {
     }
 };
 
-    useEffect(() => {
-        loadSession();
-    }, []);
+    // useEffect(() => {
+    //     loadSession();
+    // }, []);
 
     
 

@@ -24,11 +24,11 @@ function InfluencerLogin()
                 password
             }, {withCredentials: true});
             setSuccessMessage(response.data.message);
-            saveSession(response.data.user);
+            await saveSession(response.data.user);
       
             
             setError(null); 
-            navigate('/createpost');
+            navigate('/posts');
 
         }catch(error){
             console.log('Axios request failed', error);

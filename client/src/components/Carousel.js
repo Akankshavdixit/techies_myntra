@@ -70,7 +70,7 @@ function Carousel() {
   ];
 
   return (
-    <div className="bg-pink-100 mx-10 py-8 rounded-lg shadow-md">
+    <div className="bg-pink-100  py-8 rounded-lg shadow-md">
       <p className="text-center text-pink-500 font-semibold mt-3 text-lg">
         Explore the Trending Styles
       </p>

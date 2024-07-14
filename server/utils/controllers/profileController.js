@@ -99,11 +99,12 @@ const getInfluencerAccount=async(req,res)=>{
     try {
         const result = await session.run(
             `MATCH (i:User {username: $influencer_username})-[:CREATED]->(p:Post)
-            OPTIONAL MATCH (u:User {username: $username})-[:LIKES]->(p)
-            OPTIONAL MATCH (u)-[:FOLLOWS]->(i)
-            RETURN p,i,
-              CASE WHEN (u)-[:LIKES]->(p) THEN true ELSE false END AS liked,
-              CASE WHEN (u)-[:FOLLOWS]->(i) THEN true ELSE false END AS isFollowed`,
+            OPTIONAL MATCH (u:User {username: $username})
+            OPTIONAL MATCH (u)-[l:LIKES]->(p)
+            OPTIONAL MATCH (u)-[f:FOLLOWS]->(i)
+            RETURN p, i,
+              l IS NOT NULL AS liked,
+              f IS NOT NULL AS isFollowed`,
             { influencer_username:iname , username: username}
         );
         

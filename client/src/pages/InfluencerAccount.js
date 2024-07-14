@@ -18,6 +18,15 @@ export default function InfluencerAccount() {
                 p.creator === creator ? { ...p, isFollowed: !isFollowing } : p
             )
         );
+        setFollows(!isFollowing)
+        console.log(influencer)
+        setInfluencer(prev => ({
+            ...prev,
+            followers: {
+              ...prev.followers,
+              low: prev.followers.low + (isFollowing ? -1 : 1)
+            }
+          }));
     };
     
     const updateLike = (id, liked, likes) => {

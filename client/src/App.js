@@ -13,6 +13,7 @@ import CreatePost from './components/CreatePost';
 import InfluencerAccount from './pages/InfluencerAccount';
 import NotFoundPage from './pages/NotFoundPage';
 import UnauthorizedPage from './pages/UnauthorizedPage';
+import MyFashion from './pages/MyFashion';
 
 function App() {
   console.log('App component rendered');
@@ -40,6 +41,7 @@ function App() {
         <Route path='/profile' element={session?(check? <InfluencerProfile/>: <CustomerProfile/>):(<Navigate to="/" replace />)}/>
         <Route path='/createpost' element={check?<CreatePost/>:<UnauthorizedPage/>}/>
         <Route path='/influencer/:iname' element={session?<InfluencerAccount/>: null}/>
+        <Route path='/myfashion' element={<MyFashion/>}/>
         <Route path="*" element={<NotFoundPage />} />
         </Routes>
     </Router>

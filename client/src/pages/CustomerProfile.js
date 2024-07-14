@@ -50,7 +50,7 @@ export default function CustomerProfile() {
                 });
                 console.log(response.data);
                 setLikedPosts(response.data.liked);
-                setFollowing(response.data.following.low)
+                setFollowing(response.data.following)
                 setIsLoading(false)
             } catch (err) {
                 console.log(err);

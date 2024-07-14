@@ -16,6 +16,12 @@ export const SessionProvider = ({ children }) => {
         localStorage.setItem('session', JSON.stringify(sessionData));
     };
 
+    const logout = () => {
+        setSession(null); // Clear session state
+        localStorage.removeItem('session'); // Clear session from localStorage
+        // You may also want to make an API call to logout on the server-side if required
+    };
+
     const loadSession = async () => {
         const storedSession = localStorage.getItem('session');
         if (storedSession) {
@@ -41,7 +47,7 @@ export const SessionProvider = ({ children }) => {
     
 
     return (
-        <SessionContext.Provider value={{ session, saveSession }}>
+        <SessionContext.Provider value={{ session, saveSession, logout }}>
             {children}
         </SessionContext.Provider>
     );

@@ -85,8 +85,8 @@ function CustomerRegistration()
                 />
                 <textarea placeholder="Bio" value={bio} onChange={(e) => setBio(e.target.value)} className = "rounded-xl placeholder-grey py-2 px-2 w-64 border-none resize-none outline-none md:mt-7" required />
                 <input type="number" placeholder="Age" value={age} onChange={(e) => setAge(e.target.value)} className = " w-64 rounded-xl  py-2 px-2 border-none outline-none md:mt-7 placeholder-grey" required />
-                <div className = "text-red-600 ml-16 text-sm">{error}</div>
-                <div className = "text-green-600 ml-16 text-sm">{successMessage}</div>
+                <div className = "text-red-600 text-sm">{error}</div>
+                <div className = "text-green-600 text-sm">{successMessage}</div>
                 <button type="submit" className="text-white text-lg bg-orange-500 md:px-5 md:py-2   md:mt-16 rounded-xl ">
                     Register
                 </button>

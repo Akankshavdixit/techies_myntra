@@ -85,8 +85,8 @@ function InfluencerRegistration()
                 />
                 <textarea placeholder="Bio" value={bio} onChange={(e) => setBio(e.target.value)} className = " py-2 px-2 w-64 border-none rounded-xl outline-none md:mt-7 resize-none placeholder-grey" required />
                 <input type="number" placeholder="Age" value={age} onChange={(e) => setAge(e.target.value)} className = "w-64  py-2 px-2 rounded-xl border-none outline-none md:mt-7 placeholder-grey" required />
-                <div className = "text-red-600 ml-16 text-sm">{error}</div>
-                <div className = "text-green-600 ml-16 text-sm">{successMessage}</div>
+                <div className = "text-red-600  text-sm">{error}</div>
+                <div className = "text-green-600  text-sm">{successMessage}</div>
                 <button type="submit" className="text-white text-lg bg-orange-500 md:px-5 md:py-2  md:mt-16 rounded-xl ">
                     Register
                 </button>

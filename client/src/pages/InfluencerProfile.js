@@ -3,6 +3,7 @@ import { useSession } from '../context/SessionContext'
 import axios from 'axios'
 import PostDisplay from '../components/PostDisplay';
 import { BsPerson } from "react-icons/bs";
+import Navbar from '../components/Navbar';
 
 export default function InfluencerProfile() {
     const {session}=useSession()
@@ -60,7 +61,7 @@ export default function InfluencerProfile() {
     };
 
     return (
-        
+        <><Navbar/>
         <div className="p-6">
             <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between mb-6">
                 {/* Left side */}
@@ -110,6 +111,6 @@ export default function InfluencerProfile() {
                     <PostDisplay post={p} key={p.id} updateFollow={updateFollow} updateLike={updateLike} />
                 ))}
             </div>
-        </div>
+        </div></>
     );
 }

@@ -3,6 +3,7 @@ import { useSession } from '../context/SessionContext'
 import axios from 'axios'
 import { BsPerson } from "react-icons/bs";
 import PostDisplay from '../components/PostDisplay';
+import Navbar from '../components/Navbar';
 
 export default function CustomerProfile() {
     const [likedPosts, setLikedPosts]=useState([]);
@@ -56,7 +57,10 @@ export default function CustomerProfile() {
         fetchLikedPosts();
     },[session])
   return (
+    <>
+    <Navbar/>
     <div className="p-6">
+        
     <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between mb-6">
                 {/* Left side */}
                 <div className="flex items-center mb-4 lg:mb-5 ml-20 mt-3">
@@ -87,6 +91,6 @@ export default function CustomerProfile() {
         ))}
     </div>
 </div>
-
+</>
     );
 }

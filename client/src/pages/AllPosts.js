@@ -5,6 +5,7 @@ import { useSession } from '../context/SessionContext';
 import axios from 'axios';
 import './AllPosts.css'
 import {Link} from 'react-router-dom'
+import Navbar from '../components/Navbar';
 
 export default function AllPosts() {
     const [posts, setPosts] = useState([]);
@@ -86,6 +87,7 @@ export default function AllPosts() {
 
     return (
         <div className="flex flex-col bg-pink-50 shadow-2xl">
+            <Navbar/>
         <div className="allposts grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 p-4 overflow-y-auto">
           {posts.map((p) => (
             <PostDisplay key={p.id} post={p} updateFollow={updateFollow} updateLike={updateLike} />

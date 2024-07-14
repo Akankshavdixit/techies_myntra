@@ -3,6 +3,7 @@ import { useState , useEffect} from 'react';
 import PostDisplay from '../components/PostDisplay';
 import { useSession } from '../context/SessionContext';
 import axios from 'axios';
+import Navbar from '../components/Navbar';
 
 
 export default function AllPosts() {
@@ -52,6 +53,7 @@ export default function AllPosts() {
     
   return (
     <>
+    <Navbar/>
     {posts && 
     <>
         <div className='allposts grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 p-4 overflow-y-auto'>

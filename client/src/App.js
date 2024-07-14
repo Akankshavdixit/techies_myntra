@@ -29,7 +29,7 @@ function App() {
     <SessionProvider>
     <Router>
         <Routes>
-        <Route path="/" element={<Carousel/>} />
+        <Route path="/" element={!session?<Carousel/>:<AllPosts/>} />
         <Route path="/customerregistration" element={<CustomerRegistration />} />
         <Route path="/customerlogin" element={<CustomerLogin />}/>
         <Route path="/navbar" element={<Navbar/>} />

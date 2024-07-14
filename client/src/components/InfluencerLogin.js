@@ -69,7 +69,7 @@ function InfluencerLogin()
                 required
     
                 />
-                <div className = "text-red-600 ml-16 text-sm">{error}</div>
+                <div className = "text-red-600 text-sm">{error}</div>
                 
                 <button type="submit" className="text-white text-lg bg-orange-500 md:px-5 md:py-2  md:mt-16 rounded-xl ">
                     SignIn

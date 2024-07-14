@@ -48,9 +48,10 @@ export default function MyFashion() {
             <div className="mt-8 mb-8 ml-4">
                 <h2 className="text-2xl font-bold mb-4  text-pink-600">Recommended Influencers</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                    {recs.map(user => (
+                    {recs && recs.map(user => (
                         <UserTag key={user.username} username={user.username} />
                     ))}
+                    {!recs && <div>No Recommendations</div>}
                 </div>
             </div>
             <div className="mt-8">

@@ -17,13 +17,13 @@ const GetInfluencerRecommendations=async(req,res)=>{
         );
 
         if(result.records.length==0){
-            res.status(200).json({recommendations: {}})
+            return res.status(200).json({recommendations: null})
         }
         
         const recommendations = result.records.map(record => ({
             username: record.get('username')
         }));
-        res.status(200).json({ recommendations: recommendations});
+        return res.status(200).json({ recommendations: recommendations});
     } catch (error) {
         console.error('Error retrieving recommendations', error);
         res.status(500).json({ error: 'Internal server error' });

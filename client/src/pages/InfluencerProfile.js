@@ -4,12 +4,14 @@ import axios from 'axios'
 import PostDisplay from '../components/PostDisplay';
 import { BsPerson } from "react-icons/bs";
 import Navbar from '../components/Navbar';
+import Loading from './Loading';
 
 export default function InfluencerProfile() {
     const {session}=useSession()
     const [likedPosts, setLikedPosts]=useState([]);
     const [myPosts, setMyPosts]=useState([])
-    
+    const [isLoading, setIsLoading] = useState(true);
+
     const [activeTab, setActiveTab] = useState('created'); // 'created' or 'liked'
     const [numberOfFollowing, setNumberOfFollowing]=useState(0)
     const [person,setPerson]=useState(null)
@@ -49,6 +51,7 @@ export default function InfluencerProfile() {
                 setMyPosts(response.data.created);
                 setNumberOfFollowing(response.data.numberofFollowing)
                 setPerson(response.data.person)
+                setIsLoading(false)
             } catch (err) {
                 console.log(err);
             }
@@ -62,7 +65,7 @@ export default function InfluencerProfile() {
 
     return (
         <><Navbar/>
-        <div className="p-6">
+        {isLoading? <Loading/>: (<div className="p-6">
             <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between mb-6">
                 {/* Left side */}
                 <div className="flex items-center mb-4 lg:mb-5 ml-20 mt-3">
@@ -111,6 +114,7 @@ export default function InfluencerProfile() {
                     <PostDisplay post={p} key={p.id} updateFollow={updateFollow} updateLike={updateLike} />
                 ))}
             </div>
-        </div></>
+        </div>)}
+        </>
     );
 }

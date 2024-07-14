@@ -4,10 +4,12 @@ import axios from 'axios'
 import { BsPerson } from "react-icons/bs";
 import PostDisplay from '../components/PostDisplay';
 import Navbar from '../components/Navbar';
+import Loading from './Loading';
 
 export default function CustomerProfile() {
     const [likedPosts, setLikedPosts]=useState([]);
     const [activeTab, setActiveTab] = useState('created'); // 'created' or 'liked'
+    const [isLoading, setIsLoading] = useState(true);
 
     const [following, setFollowing]=useState(0)
     const {session}=useSession()
@@ -49,6 +51,7 @@ export default function CustomerProfile() {
                 console.log(response.data);
                 setLikedPosts(response.data.liked);
                 setFollowing(response.data.following.low)
+                setIsLoading(false)
             } catch (err) {
                 console.log(err);
             }
@@ -59,7 +62,7 @@ export default function CustomerProfile() {
   return (
     <>
     <Navbar/>
-    <div className="p-6">
+    {isLoading? <Loading/>:(<div className="p-6">
         
     <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between mb-6">
                 {/* Left side */}
@@ -90,7 +93,8 @@ export default function CustomerProfile() {
             <PostDisplay post={p} key={p.id} updateFollow={updateFollow} updateLike={updateLike}/>
         ))}
     </div>
-</div>
+</div>)}
+    
 </>
     );
 }

@@ -5,6 +5,7 @@ import PostDisplay from '../components/PostDisplay';
 import { BsPerson } from "react-icons/bs";
 import { useParams } from 'react-router-dom';
 import Navbar from '../components/Navbar';
+import Loading from './Loading';
 
 export default function InfluencerAccount() {
     const {iname}=useParams()
@@ -12,6 +13,8 @@ export default function InfluencerAccount() {
     const [posts, setPosts]=useState()
     const [influencer, setInfluencer]=useState()
     const [follows,setFollows]=useState()
+    const [isLoading, setIsLoading] = useState(true);
+
 
     const updateFollow = (creator, isFollowing) => {
         setPosts(prevPosts =>
@@ -50,6 +53,7 @@ export default function InfluencerAccount() {
                 
                 updateFollow(iname, follows);
                 setFollows(!follows)
+                
             }
         } catch (err) {
             console.error(err);
@@ -76,6 +80,7 @@ export default function InfluencerAccount() {
                 setPosts(result.posts)
                 setInfluencer(result.influencer)
                 setFollows(result.follows)
+                setIsLoading(false)
             } catch (err) {
                 console.log(err);
             }
@@ -87,7 +92,7 @@ export default function InfluencerAccount() {
     return (
         <>
         <Navbar/>
-        <div className="p-6">
+        {isLoading? <Loading/>:(<div className="p-6">
             <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between mb-6">
                 {/* Left side */}
                 <div className="flex items-center mb-4 lg:mb-5 ml-20 mt-3">
@@ -125,7 +130,8 @@ export default function InfluencerAccount() {
                     <PostDisplay post={p} key={p.id} updateFollow={updateFollow} updateLike={updateLike} />
                 ))}
             </div>
-        </div>
+        </div>)}
+        
         </>
     );
 }

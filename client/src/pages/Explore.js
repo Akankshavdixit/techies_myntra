@@ -4,12 +4,13 @@ import PostDisplay from '../components/PostDisplay';
 import { useSession } from '../context/SessionContext';
 import axios from 'axios';
 import Navbar from '../components/Navbar';
+import Loading from './Loading';
 
 
 export default function AllPosts() {
     const [posts, setPosts] = useState([]);
     const {session}= useSession();
-
+    const [isLoading, setIsLoading] = useState(true);
     const updateFollow = (creator, isFollowing) => {
         setPosts(prevPosts =>
             prevPosts.map(p =>
@@ -43,6 +44,7 @@ export default function AllPosts() {
               });
               console.log(response.data);
               setPosts(response.data);
+              setIsLoading(false)
           } catch (err) {
               console.log(err);
           }
@@ -54,17 +56,14 @@ export default function AllPosts() {
   return (
     <>
     <Navbar/>
-    {posts && 
-    <>
+    {isLoading? <Loading/> :(
+    
         <div className='allposts grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 p-4 overflow-y-auto'>
         {posts.map((p)=>{
             return <PostDisplay key={p.id} post={p} updateFollow={updateFollow} updateLike={updateLike}/>
         })}
         </div>
-
-    </>
-        }
-      
+        )}
     </>
   )
 }

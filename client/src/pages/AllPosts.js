@@ -4,12 +4,15 @@ import PostDisplay from '../components/PostDisplay';
 import { useSession } from '../context/SessionContext';
 import axios from 'axios';
 import './AllPosts.css'
-import {Link} from 'react-router-dom'
 import Navbar from '../components/Navbar';
+import Loading from './Loading';
+import { FaSearch } from 'react-icons/fa';
 
 export default function AllPosts() {
     const [posts, setPosts] = useState([]);
     const {session}= useSession();
+    const [isLoading, setIsLoading] = useState(true);
+    const [searchTerm, setSearchTerm] = useState('');
     
     const updateFollow = (creator, isFollowing) => {
         setPosts(prevPosts =>
@@ -18,7 +21,14 @@ export default function AllPosts() {
             )
         );
     };
-
+    const filteredPosts = posts.filter(post => {
+        const tagsArray = JSON.parse(post.tags);
+        return (
+            post.creator.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            post.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            tagsArray.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()))
+        );
+    });
     
     
     const updateLike = (id, liked, likes) => {
@@ -49,6 +59,7 @@ export default function AllPosts() {
               console.log(response.data);
               const reversedPosts = response.data.reverse();
               setPosts(reversedPosts);
+              setIsLoading(false)
               
           } catch (err) {
               console.log(err);
@@ -58,44 +69,28 @@ export default function AllPosts() {
       fetchPosts();
   }, [session]);
     
-  //return (
-    // <>
-    
-    
-    // {posts && 
-    // <>
-    // <div>
-    //     {session && session.role === "influencer" && (
-
-    //             <div>
-    //             <Link to="/posts" className="bg-pink-500 text-white px-4 py-2 rounded-lg">Create post</Link>
-    //             </div>
-    //         )}
-            
-        
-    //     <div className='allposts'>
-    //     {posts.map((p)=>{
-    //         return <PostDisplay key={p.id} post={p} updateFollow={updateFollow} updateLike={updateLike}/>
-    //     })}
-    //     </div>
-
-    // </>
-    //     }
-    //     </div>
-      
-    // </>
 
     return (
+        
         <div className="flex flex-col bg-pink-50 shadow-2xl">
             <Navbar/>
-        <div className="allposts grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 p-4 overflow-y-auto">
-          {posts.map((p) => (
+            <div className="p-4 relative">
+                <input
+                    type="text"
+                    placeholder="Search posts..."
+                    value={searchTerm}
+                    onChange={e => setSearchTerm(e.target.value)}
+                    className="w-full p-2 pl-10 rounded-md border border-pink-300 focus:outline-none focus:border-pink-500"
+                />
+                <FaSearch className="text-pink-500 absolute left-7 top-1/2 transform -translate-y-1/2" />
+            </div>
+            {isLoading? <Loading/>:( <div className="allposts grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 p-4 overflow-y-auto">
+          {filteredPosts.map((p) => (
             <PostDisplay key={p.id} post={p} updateFollow={updateFollow} updateLike={updateLike} />
           ))}
-        </div>
-      
-        
+        </div>)}
       </div>
+    
     );
     
     

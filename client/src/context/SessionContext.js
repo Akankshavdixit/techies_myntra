@@ -41,9 +41,9 @@ export const SessionProvider = ({ children }) => {
     }
 };
 
-    // useEffect(() => {
-    //     loadSession();
-    // }, []);
+    useEffect(() => {
+        loadSession();
+    }, []);
 
     
 

@@ -15,11 +15,20 @@ const PostDisplay = ({ post, updateFollow, updateLike }) => {
     const [liked, setLiked] = useState(post.liked);
     const {session}=useSession();
     const [likes,setLikes]=useState(post.likes)
+    const [isFollowing, setIsFollowing] = useState(post.isFollowed)
+    const [modalOpen, setModalOpen] = useState(false); 
+    const [tags, setTags] = useState(JSON.parse(post.tags));
     console.log(post)
     const navigate = useNavigate()
     // const [followers, setFollowers] = useState(post.followers);
-    const [isFollowing, setIsFollowing] = useState(post.isFollowed)
     
+    const handleImageClick = () => {
+      setModalOpen(true);
+  };
+
+  const closeModal = () => {
+      setModalOpen(false);
+  };
     
     
 
@@ -88,18 +97,29 @@ const PostDisplay = ({ post, updateFollow, updateLike }) => {
     
   return (
     <div className="post-container">
-    
-      
-      <Carousel showThumbs={false} showStatus={false} >
-        {post.imageUrls && post.imageUrls.map((url, index) => (
-          <div key={index}>
-            <img src={url} alt={`Post Image ${index + 1}`} />
-          </div>
-        ))}
-      </Carousel>
+      <Carousel showThumbs={false} showStatus={false} onClickItem={handleImageClick}>
+                {post.imageUrls && post.imageUrls.map((url, index) => (
+                    <div key={index}>
+                        <img src={url} alt={`Post Image ${index + 1}`} />
+                    </div>
+                ))}
+            </Carousel>
 
-
-      
+            {modalOpen && (
+                <div className="fixed inset-0 flex items-center justify-center z-50">
+                    <div className="absolute inset-0 bg-black bg-opacity-75" onClick={closeModal}></div>
+                    <div className="relative max-w-lg w-full p-2 bg-white rounded-lg">
+                        <button className="absolute top-2 right-2 text-black text-2xl" onClick={closeModal}>&times;</button>
+                        <Carousel showThumbs={false} showStatus={false} selectedItem={0}>
+                            {post.imageUrls && post.imageUrls.map((url, index) => (
+                                <div key={index}>
+                                    <img src={url} alt={`Post Image ${index + 1}`} className="rounded-lg" />
+                                </div>
+                            ))}
+                        </Carousel>
+                    </div>
+                </div>
+            )}
       <div>
       <div className='flex justify-between'>
         <div className='flex items-center'>
@@ -142,6 +162,13 @@ const PostDisplay = ({ post, updateFollow, updateLike }) => {
       <div className="ml-3">
         <p>{post.description}</p>
       </div>
+      <div className="post-tags flex flex-wrap ml-2 mb-2 mt-1">
+        {tags.map((tag, index) => (
+            <span key={index} className="bg-pink-100 text-pink-700 rounded-full px-3 py-1 text-sm mr-2 mb-2 font-semibold shadow-sm">
+                {tag}
+            </span>
+        ))}
+    </div>
       <h3 className="text-sm font-bold ml-3 mb-2">Product Links:  </h3>
       <div className="post-product-links mb-2 ">
             

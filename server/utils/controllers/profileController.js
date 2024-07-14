@@ -12,6 +12,9 @@ const getCustomerProfile=async(req,res)=>{
             RETURN post, user, creator, f IS NOT NULL AS isFollowed`,
             { username: username }
         );
+        if (result.records.length === 0) {
+            return res.status(200).json({ liked: [], following: 0 });
+        }
         
         const posts = result.records.map(record => {
             const isFollowed = record.get('isFollowed');
@@ -25,7 +28,7 @@ const getCustomerProfile=async(req,res)=>{
         
             return post;
         });
-        res.status(200).json({ liked: posts , following: result.records[0].get('user').properties.following});
+        res.status(200).json({ liked: posts , following: result.records[0].get('user').properties.following.toNumber()});
     } catch (error) {
         console.error('Error retrieving liked posts:', error);
         res.status(500).json({ error: 'Internal server error' });
@@ -45,6 +48,7 @@ const getInfluencerProfile = async(req,res)=>{
             RETURN post, creator, f IS NOT NULL AS isFollowed`,
             { username: username }
         );
+        
         
         const LikedPosts = likeResult.records.map(record => {
             const post = record.get('post').properties;
@@ -68,7 +72,7 @@ const getInfluencerProfile = async(req,res)=>{
         )
         
         const CreatedPosts = createdResults.records.map(r=>{
-            p=r.get('post').properties
+            const p=r.get('post').properties
             p.likes = p.likes.toNumber();
             p.creator = username
             return p
@@ -79,7 +83,10 @@ const getInfluencerProfile = async(req,res)=>{
             {username: username}
         )
 
-        res.status(200).json({created: CreatedPosts, liked: LikedPosts, numberofFollowing: followingResult.records[0].get('numberOfFollowing').toNumber(), person: createdResults.records[0].get('user').properties})
+        res.status(200).json({created: CreatedPosts, 
+            liked: LikedPosts, 
+            numberofFollowing: followingResult.records.length>0?followingResult.records[0].get('numberOfFollowing').toNumber():0, 
+            person: createdResults.records.length>0? createdResults.records[0].get('user').properties:{}})
 
 
     }catch (error) {

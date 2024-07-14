@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import LandingNavbar from './LandingNavbar';
 
 const Slide = ({ imageSrc, caption }) => (
   <div className="mx-auto px-8">
@@ -70,11 +71,14 @@ function Carousel() {
   ];
 
   return (
-    <div className="bg-pink-100  py-8 rounded-lg shadow-md">
-      <p className="text-center text-pink-500 font-semibold mt-3 text-lg">
+    <div className='h-full'>
+    <LandingNavbar/>
+    <div className="bg-pink-100  py-3 rounded-lg shadow-md">
+      
+      <p className="text-center text-pink-500 font-semibold  text-xl">
         Explore the Trending Styles
       </p>
-      <div className="mt-7 mx-10">
+      <div className="mt-5 mx-10">
         <Slider {...settings}>
           {slides.map((slide, index) => (
             <Slide key={index} imageSrc={slide.imageSrc} caption={slide.caption} />
@@ -89,6 +93,7 @@ function Carousel() {
           Register as Influencer
         </Link>
       </div>
+    </div>
     </div>
   );
 }

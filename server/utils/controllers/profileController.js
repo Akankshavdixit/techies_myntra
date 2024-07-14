@@ -9,7 +9,7 @@ const getCustomerProfile=async(req,res)=>{
         const result = await session.run(
             `MATCH (user:User {username: $username})-[:LIKES]->(post:Post)<-[:CREATED]-(creator:User)
             OPTIONAL MATCH (user)-[f:FOLLOWS]->(creator)
-            RETURN post, creator, f IS NOT NULL AS isFollowed`,
+            RETURN post, user, creator, f IS NOT NULL AS isFollowed`,
             { username: username }
         );
         

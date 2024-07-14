@@ -1,6 +1,8 @@
 import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useSession } from '../context/SessionContext';
+import { TbSquareRoundedLetterMFilled } from "react-icons/tb";
+
 
 const Navbar = () => {
     const { session, logout } = useSession();
@@ -22,7 +24,9 @@ const Navbar = () => {
         <nav className="bg-pink-700 p-4 flex items-center justify-between rounded-b-xl">
             {/* Website name */}
             <Link to="/" className="text-white text-xl font-bold">
-                MyntraGram
+                <div className='flex gap-2 justify-center items-center'> 
+            <TbSquareRoundedLetterMFilled size={30}/> MyntraGram
+            </div>
             </Link>
 
             {/* Tabs */}
@@ -32,6 +36,12 @@ const Navbar = () => {
                     className={`text-white hover:text-pink-500 ${isActiveLink('/posts')} px-3 py-2 rounded-md`}
                 >
                     All Posts
+                </Link>
+                <Link
+                    to="/myfashion"
+                    className={`text-white hover:text-pink-500 ${isActiveLink('/myfashion')} px-3 py-2 rounded-md`}
+                >
+                    My Fashion
                 </Link>
                 <Link
                     to="/explore"

@@ -4,6 +4,7 @@ import { useSession } from '../context/SessionContext';
 import axios from 'axios';
 import Navbar from '../components/Navbar';
 import UserTag from '../components/UserTag';
+import RecommendedPosts from '../components/RecommendedPosts';
 
 export default function MyFashion() {
     const [recs, setRecs] = useState([]);
@@ -39,20 +40,27 @@ export default function MyFashion() {
     
   return (
     <>
-        <Navbar />
-        {isLoading ? (
-            <Loading />
-        ) : (
-            <div className="p-4">
-                <h2 className="text-xl font-bold mb-4">Recommended Users</h2>
-                <div className="allposts grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 p-4 overflow-y-auto">
+    <Navbar />
+    {isLoading ? (
+        <Loading />
+    ) : (
+        <div className="  px-4">
+            <div className="mt-8 mb-8 ml-4">
+                <h2 className="text-2xl font-bold mb-4  text-pink-600">Recommended Influencers</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                     {recs.map(user => (
                         <UserTag key={user.username} username={user.username} />
                     ))}
                 </div>
             </div>
-        )}
-    </>
+            <div className="mt-8">
+                <h2 className="text-2xl font-bold mb-4 ml-4 text-pink-600">Recommended Posts</h2>
+                <RecommendedPosts/>
+            </div>
+        </div>
+    )}
+</>
+
   )
 
 }

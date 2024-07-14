@@ -114,7 +114,7 @@ const PostDisplay = ({ post, updateFollow, updateLike }) => {
             <button
               style={{ display: 'inline' }}
               onClick={toggleFollow}
-              className='ml-2 bg-pink-500 text-white rounded-lg px-2'
+              className={`ml-2 ${isFollowing? 'bg-orange-500' : ' bg-pink-500' } text-white rounded-lg px-2`}
             >
               {isFollowing ? 'Unfollow' : 'Follow'}
             </button>

@@ -86,18 +86,20 @@ export default function AllPosts() {
 
     return (
         <div className="flex flex-col bg-pink-50 shadow-2xl">
-            <div className='allposts flex-1 p-[420px]  pt-4 overflow-y-auto'>
-                {posts.map((p) => (
-                    <PostDisplay key={p.id} post={p} updateFollow={updateFollow} updateLike={updateLike} />
-                ))}
-            </div>
-
-            {session && session.role === "influencer" && (
-                <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2">
-                    <Link to="/createpost" className="bg-orange-500 hover:bg-pink-500  text-white px-4 py-3 rounded-full">+</Link>
-                </div>
-            )}
+        <div className="allposts grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 p-4 overflow-y-auto">
+          {posts.map((p) => (
+            <PostDisplay key={p.id} post={p} updateFollow={updateFollow} updateLike={updateLike} />
+          ))}
         </div>
+      
+        {session && session.role === "influencer" && (
+          <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2">
+            <Link to="/createpost" className="bg-orange-500 hover:bg-pink-500 text-white px-4 py-3 rounded-full">
+              +
+            </Link>
+          </div>
+        )}
+      </div>
     );
     
     

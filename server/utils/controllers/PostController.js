@@ -154,8 +154,12 @@ const getExplore=async(req,res)=>{
     const result = await session.run(
         `MATCH (p:Post)<-[:CREATED]-(creator:User)
          WHERE p.createdAt >= date($trendDate)
-         OPTIONAL MATCH (p)<-[:LIKES]-(u:User {username: $username})
-         RETURN p, creator, p.likes AS likeCount, count(u) AS liked
+         OPTIONAL MATCH (u:User {username : $username })
+         OPTIONAL MATCH (u)-[like: LIKES]->(p)
+         OPTIONAL MATCH (u)-[follow:FOLLOWS]->(creator)
+         RETURN p,creator, p.likes AS likeCount,
+         CASE WHEN like IS NOT NULL THEN true ELSE false END AS liked,
+         CASE WHEN follow IS NOT NULL THEN true ELSE false END AS isFollowed
          ORDER BY likeCount DESC`,
         { trendDate: priorDate, username: username }
       );
@@ -165,8 +169,8 @@ const getExplore=async(req,res)=>{
         const post = postNode.properties;
          // Ensure the post ID is included if needed
         post.likes = post.likes.toNumber();
-        post.liked = record.get('liked').toNumber() > 0;
-      
+        post.liked = record.get('liked');
+        post.isFollowed = record.get('isFollowed')
         post.creator = record.get('creator').properties.username;
          
           return post;

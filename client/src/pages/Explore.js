@@ -54,7 +54,7 @@ export default function AllPosts() {
     <>
     {posts && 
     <>
-        <div className='allposts'>
+        <div className='allposts grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 p-4 overflow-y-auto'>
         {posts.map((p)=>{
             return <PostDisplay key={p.id} post={p} updateFollow={updateFollow} updateLike={updateLike}/>
         })}

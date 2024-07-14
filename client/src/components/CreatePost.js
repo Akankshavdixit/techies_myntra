@@ -15,6 +15,7 @@ const CreatePost = () => { // Pass the JWT token as a prop
   const myntraLinkPattern =/^https:\/\/www\.myntra\.com.*\/buy$/i
   const {session} = useSession();
   const [filePreviews, setFilePreviews] = useState([]);
+  const [selectedImage, setSelectedImage]=useState(null)
 
   const validateProductLinks = () => {
     return productLinks.every(link => myntraLinkPattern.test(link));
@@ -58,6 +59,14 @@ const CreatePost = () => { // Pass the JWT token as a prop
     setFilePreviews(previewUrls);
   };
 
+  const handleImageClick=(preview)=>{
+    setSelectedImage(preview)
+  }
+
+  const closeModal=()=>{
+    setSelectedImage(null)
+  }
+
   const handleLinkChange = (index, value) => {
     const newLinks = [...productLinks];
     newLinks[index] = value;
@@ -73,6 +82,7 @@ const CreatePost = () => { // Pass the JWT token as a prop
     newLinks.splice(index, 1);
     setProductLinks(newLinks);
   };
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -115,7 +125,7 @@ const CreatePost = () => { // Pass the JWT token as a prop
   };
 
   return (
-    <div className="flex 100bg-purple-">
+    <div className="flex min-h-screen">
     <div className=" bg-pink-50 p-16 w-1/2 pt-10 rounded-r-[50px] shadow-2xl">
       <h2 className="text-sm text-pink-500 font-semibold mb-4">Post Images</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
@@ -133,9 +143,19 @@ const CreatePost = () => { // Pass the JWT token as a prop
         </label>
         <div className="flex flex-wrap space-x-2 space-y-2 mt-2">
           {filePreviews.map((preview, index) => (
-            <img key={index} src={preview} alt={`preview ${index}`} className="w-32 h-32 object-cover rounded-lg" />
+            <img key={index} src={preview} alt={`preview ${index}`} className="w-32 h-32 object-cover rounded-lg  " onClick={()=> handleImageClick(preview)} />
           ))}
         </div>
+        {selectedImage && (
+        <div className="fixed inset-0 flex items-center justify-center z-50" >
+          <div className="absolute inset-0 bg-black bg-opacity-75" onClick={closeModal}></div>
+          <div className="relative">
+            <button className="absolute top-2 right-4 text-black text-2xl" onClick={closeModal}>&times;</button>
+            <img src={selectedImage} alt="Full-size preview" className="max-w-full max-h-screen rounded-lg" />
+          </div>
+          
+        </div>
+      )}
         <input 
           type="text" 
           value={description} 
@@ -175,54 +195,55 @@ const CreatePost = () => { // Pass the JWT token as a prop
             Add another link
           </button>
         </div>
-        <div>
-          <h3 className="text-sm font-semibold text-pink-500 mb-2">Select Tags:</h3>
+        <div className="bg-white p-4 rounded-lg shadow-md">
+  <h3 className="text-sm font-semibold text-pink-500 mb-2">Select Tags:</h3>
+  <input
+    type="text"
+    placeholder="Search tags..."
+    value={searchTerm}
+    onChange={(e) => setSearchTerm(e.target.value)}
+    className="w-full px-3 py-2 bg-pink-50 border border-pink-300 rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-pink-300"
+  />
+  <ul className="grid grid-cols-2 gap-2 text-pink-900 font-light">
+    {displayedTags.map((tag, index) => (
+      <li key={index} className="flex items-center space-x-2">
+        <label className="flex items-center">
           <input
-            type="text"
-            placeholder="Search tags..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full px-3 py-2  bg-white rounded-lg mb-2"
+            type="checkbox"
+            checked={selectedTags.includes(tag)}
+            onChange={() => handleTagSelection(tag)}
+            className="mr-2 form-checkbox h-4 w-4 text-pink-500 border-pink-300 rounded focus:ring-pink-300"
           />
-          <ul className="space-y-1 text-pink-500 font-light">
-            {displayedTags.map((tag, index) => (
-              <li key={index} className="flex items-center space-x-2">
-                <label className="flex items-center">
-                  <input
-                    type="checkbox"
-                    checked={selectedTags.includes(tag)}
-                    onChange={() => handleTagSelection(tag)}
-                    className="mr-2"
-                  />
-                  {tag}
-                </label>
-              </li>
-            ))}
-          </ul>
-        </div>
+          {tag}
+        </label>
+      </li>
+    ))}
+  </ul>
+</div>
+
         <button type="submit" className="bg-orange-500 hover:bg-pink-500 text-white px-4 py-2 rounded-lg">
           Submit Post
         </button>
       </form>
     </div>
     <div className="w-1/2 p-10 shadow-2xl pt-20 rounded-l-[50px]">
-    <p className="text-pink-500 font-light text-sm">Dear {session && session.username},<br></br>
+    <p className="text-pink-900 font-light text-sm">Dear {session && session.username},<br></br>
     <br></br>
 
-    I hope this message finds you well. As always, your impeccable sense of style and fashion insight never cease to amaze your audience. Your upcoming post is eagerly anticipated by your followers, and I’m sure it will be yet another hit.<br></br>
-    <br></br>
-    <br></br>
+        I hope this message finds you well. As always, your impeccable sense of style and fashion insight never cease to amaze your audience. Your upcoming post is eagerly anticipated by your followers, and I’m sure it will be yet another hit.<br></br>
+        <br></br>
+        <br></br>
 
-Your dedication to curating such unique and stylish content has not gone unnoticed. Each post not only showcases your incredible fashion sense but also provides inspiration to countless individuals who look up to you for guidance and ideas. Your ability to stay ahead of trends and present them in such an engaging and accessible manner is truly commendable.<br></br>
-<br></br>
-<br></br>
+        Your dedication to curating such unique and stylish content has not gone unnoticed. Each post not only showcases your incredible fashion sense but also provides inspiration to countless individuals who look up to you for guidance and ideas. Your ability to stay ahead of trends and present them in such an engaging and accessible manner is truly commendable.<br></br>
+        <br></br>
+        <br></br>
 
-Thank you for being a source of inspiration and for sharing your incredible fashion journey with us. Your creativity and passion for fashion resonate deeply with your audience, fostering a sense of community and connection that is rare and special. I’m looking forward to your next post and the positive impact it will undoubtedly have.<br></br>
-<br></br>
-<br></br>
+        Thank you for being a source of inspiration and for sharing your incredible fashion journey with us. Your creativity and passion for fashion resonate deeply with your audience, fostering a sense of community and connection that is rare and special. I’m looking forward to your next post and the positive impact it will undoubtedly have.<br></br>
+        <br></br>
+        <br></br>
 
-Wishing you all the best,<br></br>
-Myntragram</p>
+        Wishing you all the best,<br></br>
+        Myntragram</p>
 <div className="mt-12">
   <Link to="/posts" className="bg-orange-500 hover:bg-pink-500 text-white px-4 py-2 rounded-lg">View posts</Link>
 

@@ -55,17 +55,17 @@ function InfluencerRegistration()
     };
     
     return (
-        <div className="flex rounded-3xl mx-48 mt-16">
+        <div className="flex items-center justify-center min-h-screen rounded-3xl mx-48">
                 
             <div className = "bg-pink-100 rounded-l-3xl  w-2/5 h-[550px]">
-            <form onSubmit={handleRegistration}>
+            <form onSubmit={handleRegistration} className=' flex flex-col justify-center items-center'>
                 <input 
                 onChange={(e) => setUsername(e.target.value)}
                 type = 'text'
                 placeholder = 'username'
                 name = 'username'
                 id = 'username'
-                className = "md:ml-16 rounded-xl bg-pink-500 w-48 py-2 px-2 border-none outline-none md:mt-24 placeholder-white"
+                className = " rounded-xl w-64 py-2 px-2 border-none outline-none md:mt-24 placeholder-grey"
                 spellcheck="false"
                 value = {username}
                 required
@@ -77,35 +77,32 @@ function InfluencerRegistration()
                 placeholder = 'password'
                 name = 'password'
                 id = 'password'
-                className = "md:ml-16 rounded-xl bg-pink-500 w-48 py-2 px-2 border-none outline-none md:mt-7 placeholder-white"
+                className = "rounded-xl  w-64 py-2 px-2 border-none outline-none md:mt-7 placeholder-grey"
                 spellcheck="false"
                 value = {password}
                 required
     
                 />
-                <textarea placeholder="Bio" value={bio} onChange={(e) => setBio(e.target.value)} className = "md:ml-16 bg-pink-500 py-2 px-2 w-48 border-none rounded-xl outline-none md:mt-7 placeholder-white" required />
-                <input type="number" placeholder="Age" value={age} onChange={(e) => setAge(e.target.value)} className = "md:ml-16 w-48 bg-pink-500 py-2 px-2 rounded-xl border-none outline-none md:mt-7 placeholder-white" required />
+                <textarea placeholder="Bio" value={bio} onChange={(e) => setBio(e.target.value)} className = " py-2 px-2 w-64 border-none rounded-xl outline-none md:mt-7 resize-none placeholder-grey" required />
+                <input type="number" placeholder="Age" value={age} onChange={(e) => setAge(e.target.value)} className = "w-64  py-2 px-2 rounded-xl border-none outline-none md:mt-7 placeholder-grey" required />
                 <div className = "text-red-600 ml-16 text-sm">{error}</div>
                 <div className = "text-green-600 ml-16 text-sm">{successMessage}</div>
-                <button type="submit" className="text-white text-lg bg-orange-500 md:px-5 md:py-2 md:ml-24   md:mt-16 rounded-xl ">
+                <button type="submit" className="text-white text-lg bg-orange-500 md:px-5 md:py-2  md:mt-16 rounded-xl ">
                     Register
                 </button>
     
-                <p class="md:ml-14 text-sm md:mt-2 ">
+                <p class=" text-sm md:mt-2 ">
                 Already have an account?
                 <Link
                     class="font-semibold text-orange-500 transition-all duration-200"
                     to="/influencerlogin"
-                    >Login</Link>
+                    > Login</Link>
                 </p>
-                
-                
             </form>
     
-    
         </div>
-        <div className="w-3/5"  >
-         <img src="/resources/registrationwallpaper.jpg" className="h-[550px]  "></img>
+        <div className="w-3/5 "  >
+         <img src="/resources/registrationwallpaper.jpg" className="h-[550px] rounded-r-3xl "></img>
 
         </div>
         

@@ -31,7 +31,7 @@ function App() {
     
     <Router>
         <Routes>
-        <Route path="/" element={<Carousel/>} />
+        <Route path="/" element={session?<Navigate to="/posts" replace />:<Carousel/>} />
         <Route path="/customerregistration" element={!session?<CustomerRegistration />: <AllPosts/>} />
         <Route path="/customerlogin" element={!session?<CustomerLogin />: <AllPosts/>}/>
         <Route path="/influencerregistration" element={!session?<InfluencerRegistration />:<AllPosts/>} />

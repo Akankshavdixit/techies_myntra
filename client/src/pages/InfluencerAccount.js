@@ -6,6 +6,7 @@ import { BsPerson } from "react-icons/bs";
 import { useParams } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Loading from './Loading';
+import Layout from './Layout';
 
 export default function InfluencerAccount() {
     const {iname}=useParams()
@@ -90,8 +91,7 @@ export default function InfluencerAccount() {
     },[session])
 
     return (
-        <>
-        <Navbar/>
+        <Layout>
         {isLoading? <Loading/>:(<div className="p-6">
             <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between mb-6">
                 {/* Left side */}
@@ -132,6 +132,6 @@ export default function InfluencerAccount() {
             </div>
         </div>)}
         
-        </>
+        </Layout>
     );
 }

@@ -5,6 +5,7 @@ import { useSession } from '../context/SessionContext';
 import axios from 'axios';
 import Navbar from '../components/Navbar';
 import Loading from './Loading';
+import Layout from './Layout';
 
 
 export default function AllPosts() {
@@ -54,8 +55,8 @@ export default function AllPosts() {
   }, [session]);
     
   return (
-    <>
-    <Navbar/>
+    <Layout>
+    
     {isLoading? <Loading/> :(
     
         <div className='allposts grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 p-4 overflow-y-auto'>
@@ -64,6 +65,6 @@ export default function AllPosts() {
         })}
         </div>
         )}
-    </>
+    </Layout>
   )
 }

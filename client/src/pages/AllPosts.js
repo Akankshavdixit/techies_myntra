@@ -7,6 +7,7 @@ import './AllPosts.css'
 import Navbar from '../components/Navbar';
 import Loading from './Loading';
 import { FaSearch } from 'react-icons/fa';
+import Layout from './Layout';
 
 export default function AllPosts() {
     const [posts, setPosts] = useState([]);
@@ -71,9 +72,8 @@ export default function AllPosts() {
     
 
     return (
-        
+        <Layout>
         <div className="flex flex-col bg-pink-50 shadow-2xl">
-            <Navbar/>
             <div className="p-4 relative">
                 <input
                     type="text"
@@ -90,6 +90,7 @@ export default function AllPosts() {
           ))}
         </div>)}
       </div>
+      </Layout>
     
     );
     

@@ -5,6 +5,7 @@ import axios from 'axios';
 import Navbar from '../components/Navbar';
 import UserTag from '../components/UserTag';
 import RecommendedPosts from '../components/RecommendedPosts';
+import Layout from './Layout';
 
 export default function MyFashion() {
     const [recs, setRecs] = useState([]);
@@ -39,8 +40,7 @@ export default function MyFashion() {
   }, [session]);
     
   return (
-    <>
-    <Navbar />
+    <Layout>
     {isLoading ? (
         <Loading />
     ) : (
@@ -60,7 +60,7 @@ export default function MyFashion() {
             </div>
         </div>
     )}
-</>
+</Layout>
 
   )
 

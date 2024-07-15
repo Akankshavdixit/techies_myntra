@@ -70,6 +70,16 @@ const getInfluencerProfile = async(req,res)=>{
             return post, user`,
             {username: username}
         )
+        let person;
+
+        if (createdResults.records.length==0){
+             r = await session.run(
+                `MATCH (user:User {username: $username})
+                RETURN user`,
+                {username: username}
+             )
+             person=r.records[0].get('user').properties
+        }
         
         const CreatedPosts = createdResults.records.map(r=>{
             const p=r.get('post').properties
@@ -82,11 +92,13 @@ const getInfluencerProfile = async(req,res)=>{
             RETURN COUNT(following) AS numberOfFollowing`,
             {username: username}
         )
+        console.log(createdResults.records)
+        console.log(person)
 
         res.status(200).json({created: CreatedPosts, 
             liked: LikedPosts, 
             numberofFollowing: followingResult.records.length>0?followingResult.records[0].get('numberOfFollowing').toNumber():0, 
-            person: createdResults.records.length>0? createdResults.records[0].get('user').properties:{}})
+            person: createdResults.records.length>0? createdResults.records[0].get('user').properties:person})
 
 
     }catch (error) {

@@ -11,7 +11,7 @@ import Layout from './Layout';
 export default function InfluencerAccount() {
     const {iname}=useParams()
     const {session}=useSession()
-    const [posts, setPosts]=useState()
+    const [posts, setPosts]=useState(null)
     const [influencer, setInfluencer]=useState()
     const [follows,setFollows]=useState()
     const [isLoading, setIsLoading] = useState(true);
@@ -109,7 +109,7 @@ export default function InfluencerAccount() {
                 {/* Right side */}
                 <div className="flex flex-col lg:flex-row lg:items-center lg:w-1/3">
                     <div className="text-center mb-2 lg:mb-0 lg:mr-4">
-                        <div className="text-xl font-bold">{influencer && influencer.followers.low}</div>
+                        <div className="text-xl font-bold">{influencer.followers && influencer.followers.low}</div>
                         <div className="text-gray-600">Followers</div>
                     </div>
                     <div onClick={()=>{console.log(1);toggleFollow()}} className="text-center ml-5 mb-2 lg:mb-0 lg:mr-4">

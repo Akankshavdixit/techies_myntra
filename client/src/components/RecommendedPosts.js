@@ -25,16 +25,35 @@ const RecommendedPosts = () => {
     };
     useEffect(() => {
         
+        // const fetchRecommendations = async () => {
+        //     if (!session){
+        //         alert("No user Session found!")
+        //         return
+        //     }
+        //     try {
+        //         const response = await axios.get(`http://127.0.0.1:5000/recommend`, {
+        //             params: {
+        //                 user_id: session.username,
+        //                 num_recommendations: 12
+        //             }
+        //         });
+        //         console.log(response.data)
+        //         setRecommendations(response.data.recommendations);
+        //         setIsLoading(false)
+        //     } catch (error) {
+        //         console.error('Error fetching recommendations:', error);
+        //     }
+        // };
         const fetchRecommendations = async () => {
             if (!session){
                 alert("No user Session found!")
                 return
             }
             try {
-                const response = await axios.get(`http://127.0.0.1:5000/recommend`, {
-                    params: {
-                        user_id: session.username,
-                        num_recommendations: 12
+                const response = await axios.get(`http://localhost:8000/rec/posts`, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${session.token}`, // Include the JWT token in the header
                     }
                 });
                 console.log(response.data)
@@ -55,9 +74,10 @@ const RecommendedPosts = () => {
         
         <div>
             {isLoading? <Loading/>:(<div className="allposts grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 p-4 overflow-y-auto">
-          {recommendations.map((p) => (
+          {recommendations && recommendations.map((p) => (
             <PostDisplay key={p.id} post={p} updateFollow={updateFollow} updateLike={updateLike} />
           ))}
+          {!recommendations && <div>No Recommendations</div>}
         </div>)}
             
             

@@ -10,7 +10,7 @@ const LandingNavbar = () => {
             {/* Website name */}
             <Link to="/" className="text-white text-xl font-bold">
                 <div className='flex gap-2 justify-center items-center'> 
-            <TbSquareRoundedLetterMFilled size={30}/> MyntraGram
+            <TbSquareRoundedLetterMFilled size={30}/> ShopSnap
             </div>
             </Link>
 

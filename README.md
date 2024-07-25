@@ -1,4 +1,4 @@
-# MyntraGram
+# ShopSnap
 
 Your Social Shopping Platform.
 
